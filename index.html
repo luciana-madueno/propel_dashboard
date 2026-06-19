@@ -127,9 +127,9 @@
   </div>
 
   <div class="scorecards">
-    <div class="scorecard"><div class="val" id="sc-posts">—</div><div class="lbl">Posts publicados</div><div class="sub" id="sc-posts-sub">—</div></div>
-    <div class="scorecard"><div class="val val-ig" id="sc-ig">—</div><div class="lbl">Tasa de interacción IG</div><div class="sub">Promedio del período</div></div>
-    <div class="scorecard"><div class="val val-lk" id="sc-lk">—</div><div class="lbl">Tasa de interacción LK</div><div class="sub">Promedio del período</div></div>
+    <div class="scorecard"><div class="val" id="sc-posts">—</div><div class="lbl">Publicaciones</div><div class="sub" id="sc-posts-sub">—</div></div>
+    <div class="scorecard"><div class="val val-ig" id="sc-stories">—</div><div class="lbl">Historias</div><div class="sub">Instagram</div></div>
+    <div class="scorecard"><div class="val val-lk" id="sc-comments">—</div><div class="lbl">Comentarios</div><div class="sub">IG + LinkedIn</div></div>
   </div>
 
   <div class="charts-row">
@@ -416,16 +416,12 @@ function renderLinktree(rows) {
   }).join('');
 }
 
-function updateScorecards(igRows, lkRows) {
-  // Contar todos los registros sin filtrar por tipo
+function updateScorecards(igRows, lkRows, storiesRows, cmRows) {
   const totalPosts = igRows.length + lkRows.length;
-  const igEng = avg(igRows.map(r => tasa(r)));
-  const lkEng = avg(lkRows.map(r => tasa(r)));
-
   document.getElementById('sc-posts').textContent = totalPosts;
   document.getElementById('sc-posts-sub').textContent = `${lkRows.length} LK · ${igRows.length} IG`;
-  document.getElementById('sc-ig').textContent = fmt(igEng);
-  document.getElementById('sc-lk').textContent = fmt(lkEng);
+  document.getElementById('sc-stories').textContent = storiesRows.length;
+  document.getElementById('sc-comments').textContent = cmRows.length;
 
   const allDates = [...igRows,...lkRows].map(r=>key(r,'fecha','Fecha')).filter(Boolean)
     .map(d=>new Date(d)).filter(d=>!isNaN(d)).sort((a,b)=>a-b);
@@ -446,7 +442,7 @@ async function init() {
       fetchCSV(URL_STORIES), fetchCSV(URL_ENG)
     ]);
 
-    updateScorecards(igRows, lkRows);
+    updateScorecards(igRows, lkRows, storiesRows, cmRows);
 
     if (chartIG) chartIG.destroy();
     if (chartLK) chartLK.destroy();
