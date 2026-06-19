@@ -163,23 +163,25 @@
   <div class="scorecards" id="scorecards-stories">
     <div class="scorecard">
       <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Visualizaciones</div>
-      <div style="display:flex;gap:24px;align-items:flex-end;">
+      <div style="display:flex;gap:20px;align-items:flex-end;">
         <div><div class="val val-ig" id="st-views-max">—</div><div class="lbl">Máx. por historia</div></div>
         <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-views-avg">—</div><div class="lbl">Promedio Q</div></div>
       </div>
     </div>
     <div class="scorecard">
       <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Clics en el enlace</div>
-      <div style="display:flex;gap:24px;align-items:flex-end;">
-        <div><div class="val val-lk" id="st-clicks-max">—</div><div class="lbl">Máx. por historia</div></div>
-        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-clicks-avg">—</div><div class="lbl">Promedio Q</div></div>
+      <div style="display:flex;gap:20px;align-items:flex-end;">
+        <div><div class="val val-lk" id="st-clicks-total">—</div><div class="lbl">Total Q</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-clicks-max">—</div><div class="lbl">Máx.</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--text-tertiary)" id="st-clicks-avg">—</div><div class="lbl">Promedio</div></div>
       </div>
     </div>
     <div class="scorecard">
       <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Visitas al perfil</div>
-      <div style="display:flex;gap:24px;align-items:flex-end;">
-        <div><div class="val" id="st-profile-max">—</div><div class="lbl">Máx. por historia</div></div>
-        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-profile-avg">—</div><div class="lbl">Promedio Q</div></div>
+      <div style="display:flex;gap:20px;align-items:flex-end;">
+        <div><div class="val" id="st-profile-total">—</div><div class="lbl">Total Q</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-profile-max">—</div><div class="lbl">Máx.</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--text-tertiary)" id="st-profile-avg">—</div><div class="lbl">Promedio</div></div>
       </div>
     </div>
   </div>
@@ -337,12 +339,8 @@ const avatarColors = [
 const storyClasses = ['s1','s2','s3'];
 const storyIcons = ['📊','💡','🎙️'];
 
-function thumbIG(p, i) {
-  return `<div class="post-thumb ig-thumb" style="background:var(--bg);border-bottom:1px solid var(--border);"><div class="thumb-title" style="color:var(--text-primary);margin-top:0;font-size:13px;font-weight:500;line-height:1.4;">${key(p,'titulo','Titulo','título')}</div></div>`;
-}
-function thumbLK(p, i) {
-  return `<div class="post-thumb lk-thumb" style="background:var(--bg);border-bottom:1px solid var(--border);"><div class="thumb-title" style="color:var(--text-primary);margin-top:0;font-size:13px;font-weight:500;line-height:1.4;">${key(p,'titulo','Titulo','título')}</div><div class="thumb-author" style="color:var(--text-tertiary);">${key(p,'autor','Autor') ? 'por '+key(p,'autor','Autor') : ''}</div></div>`;
-}
+function thumbIG(p, i) { return ''; }
+function thumbLK(p, i) { return ''; }
 
 // IG: ordenar por tasa de interacción
 function renderIGPosts(rows) {
@@ -392,22 +390,26 @@ function renderLKPosts(rows) {
 
 function renderStories(rows) {
   if (!rows.length) {
-    ['st-views-max','st-views-avg','st-clicks-max','st-clicks-avg','st-profile-max','st-profile-avg'].forEach(id => {
+    ['st-views-max','st-views-avg','st-clicks-total','st-clicks-max','st-clicks-avg','st-profile-total','st-profile-max','st-profile-avg'].forEach(id => {
       document.getElementById(id).textContent = '—';
     });
     return;
   }
 
-  const views    = rows.map(r => parseFloat(key(r,'Visualizaciones','visualizaciones')||0));
-  const clicks   = rows.map(r => parseFloat(key(r,'Clics en el enlace','clics_enlace')||0));
-  const profile  = rows.map(r => parseFloat(key(r,'Visitas al perfil','visitas_perfil')||0));
+  const views   = rows.map(r => parseFloat(key(r,'Visualizaciones','visualizaciones')||0));
+  const clicks  = rows.map(r => parseFloat(key(r,'Clics en el enlace','clics_enlace')||0));
+  const profile = rows.map(r => parseFloat(key(r,'Visitas al perfil','visitas_perfil')||0));
 
-  document.getElementById('st-views-max').textContent   = fmtNum(Math.max(...views));
-  document.getElementById('st-views-avg').textContent   = fmtNum(Math.round(avg(views)));
-  document.getElementById('st-clicks-max').textContent  = fmtNum(Math.max(...clicks));
-  document.getElementById('st-clicks-avg').textContent  = fmtNum(Math.round(avg(clicks)));
-  document.getElementById('st-profile-max').textContent = fmtNum(Math.max(...profile));
-  document.getElementById('st-profile-avg').textContent = fmtNum(Math.round(avg(profile)));
+  const sum = arr => arr.reduce((a,b) => a+b, 0);
+
+  document.getElementById('st-views-max').textContent    = fmtNum(Math.max(...views));
+  document.getElementById('st-views-avg').textContent    = fmtNum(Math.round(avg(views)));
+  document.getElementById('st-clicks-total').textContent = fmtNum(sum(clicks));
+  document.getElementById('st-clicks-max').textContent   = fmtNum(Math.max(...clicks));
+  document.getElementById('st-clicks-avg').textContent   = fmtNum(Math.round(avg(clicks)));
+  document.getElementById('st-profile-total').textContent= fmtNum(sum(profile));
+  document.getElementById('st-profile-max').textContent  = fmtNum(Math.max(...profile));
+  document.getElementById('st-profile-avg').textContent  = fmtNum(Math.round(avg(profile)));
 }
 
 function renderComments(rows) {
