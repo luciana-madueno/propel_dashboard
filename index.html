@@ -162,13 +162,26 @@
   <div class="section-hd">Historias · Resumen del período</div>
   <div class="scorecards" id="scorecards-stories">
     <div class="scorecard">
-      <div style="display:flex;gap:16px;align-items:flex-end;">
-        <div><div class="val val-ig" id="st-views-max">—</div><div class="lbl">Visualizaciones máx.</div></div>
-        <div style="padding-bottom:4px;"><div style="font-size:20px;font-weight:600;color:var(--text-secondary)" id="st-views-avg">—</div><div class="lbl">Promedio</div></div>
+      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Visualizaciones</div>
+      <div style="display:flex;gap:24px;align-items:flex-end;">
+        <div><div class="val val-ig" id="st-views-max">—</div><div class="lbl">Máx. por historia</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-views-avg">—</div><div class="lbl">Promedio Q</div></div>
       </div>
     </div>
-    <div class="scorecard"><div class="val val-lk" id="st-clicks">—</div><div class="lbl">Clics en el enlace</div><div class="sub">Total del período</div></div>
-    <div class="scorecard"><div class="val" id="st-profile">—</div><div class="lbl">Visitas al perfil</div><div class="sub">Total del período</div></div>
+    <div class="scorecard">
+      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Clics en el enlace</div>
+      <div style="display:flex;gap:24px;align-items:flex-end;">
+        <div><div class="val val-lk" id="st-clicks-max">—</div><div class="lbl">Máx. por historia</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-clicks-avg">—</div><div class="lbl">Promedio Q</div></div>
+      </div>
+    </div>
+    <div class="scorecard">
+      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Visitas al perfil</div>
+      <div style="display:flex;gap:24px;align-items:flex-end;">
+        <div><div class="val" id="st-profile-max">—</div><div class="lbl">Máx. por historia</div></div>
+        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-profile-avg">—</div><div class="lbl">Promedio Q</div></div>
+      </div>
+    </div>
   </div>
 
   <hr class="divider">
@@ -325,10 +338,10 @@ const storyClasses = ['s1','s2','s3'];
 const storyIcons = ['📊','💡','🎙️'];
 
 function thumbIG(p, i) {
-  return `<div class="post-thumb ig-thumb" style="background:${igGrads[i]}"><div class="thumb-logo">Impulso</div><div class="thumb-title">${key(p,'titulo','Titulo','título')}</div></div>`;
+  return `<div class="post-thumb ig-thumb" style="background:var(--bg);border-bottom:1px solid var(--border);"><div class="thumb-title" style="color:var(--text-primary);margin-top:0;font-size:13px;font-weight:500;line-height:1.4;">${key(p,'titulo','Titulo','título')}</div></div>`;
 }
 function thumbLK(p, i) {
-  return `<div class="post-thumb lk-thumb" style="background:${lkColors[i]}"><div class="thumb-logo">Impuls<strong>in</strong></div><div class="thumb-title">${key(p,'titulo','Titulo','título')}</div><div class="thumb-author">${key(p,'autor','Autor') ? 'por '+key(p,'autor','Autor') : ''}</div><div class="thumb-tri"></div></div>`;
+  return `<div class="post-thumb lk-thumb" style="background:var(--bg);border-bottom:1px solid var(--border);"><div class="thumb-title" style="color:var(--text-primary);margin-top:0;font-size:13px;font-weight:500;line-height:1.4;">${key(p,'titulo','Titulo','título')}</div><div class="thumb-author" style="color:var(--text-tertiary);">${key(p,'autor','Autor') ? 'por '+key(p,'autor','Autor') : ''}</div></div>`;
 }
 
 // IG: ordenar por tasa de interacción
@@ -346,7 +359,7 @@ function renderIGPosts(rows) {
         <div class="post-metrics">
           <div class="pm"><span class="v">${fmtNum(key(p,'alcance','Alcance'))}</span><span class="l">Alcance</span></div>
           <div class="pm"><span class="v">${fmtNum(key(p,'guardados','Guardados'))}</span><span class="l">Guardados</span></div>
-          <div class="pm"><span class="v">${fmt(tasa(p))}</span><span class="l">Tasa inter.</span></div>
+          <div class="pm"><span class="v">${Math.round(tasa(p))}</span><span class="l">Tasa inter.</span></div>
         </div>
         ${key(p,'insight','Insight') ? `<div class="post-insight ig">${key(p,'insight','Insight')}</div>` : ''}
         ${key(p,'thumbnail_url','url','URL') ? `<a class="post-link" href="${key(p,'thumbnail_url','url','URL')}" target="_blank">Ver post →</a>` : ''}
@@ -369,7 +382,7 @@ function renderLKPosts(rows) {
         <div class="post-metrics">
           <div class="pm"><span class="v">${fmtNum(key(p,'impresiones','Impresiones'))}</span><span class="l">Imp.</span></div>
           <div class="pm"><span class="v">${fmtNum(key(p,'clics','Clics'))}</span><span class="l">Clics</span></div>
-          <div class="pm"><span class="v">${fmt(tasa(p))}</span><span class="l">Tasa inter.</span></div>
+          <div class="pm"><span class="v">${Math.round(tasa(p))}</span><span class="l">Tasa inter.</span></div>
         </div>
         ${key(p,'insight','Insight') ? `<div class="post-insight lk">${key(p,'insight','Insight')}</div>` : ''}
         ${key(p,'url','URL','thumbnail_url') ? `<a class="post-link" href="${key(p,'url','URL','thumbnail_url')}" target="_blank">Ver post →</a>` : ''}
@@ -379,26 +392,22 @@ function renderLKPosts(rows) {
 
 function renderStories(rows) {
   if (!rows.length) {
-    document.getElementById('st-views-max').textContent = '—';
-    document.getElementById('st-views-avg').textContent = '—';
-    document.getElementById('st-clicks').textContent = '—';
-    document.getElementById('st-profile').textContent = '—';
+    ['st-views-max','st-views-avg','st-clicks-max','st-clicks-avg','st-profile-max','st-profile-avg'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+    });
     return;
   }
 
-  const views = rows.map(r => parseFloat(key(r,'Visualizaciones','visualizaciones')||0));
-  const clicks = rows.map(r => parseFloat(key(r,'Clics en el enlace','clics_enlace','clics')||0));
-  const profileVisits = rows.map(r => parseFloat(key(r,'Visitas al perfil','visitas_perfil')||0));
+  const views    = rows.map(r => parseFloat(key(r,'Visualizaciones','visualizaciones')||0));
+  const clicks   = rows.map(r => parseFloat(key(r,'Clics en el enlace','clics_enlace')||0));
+  const profile  = rows.map(r => parseFloat(key(r,'Visitas al perfil','visitas_perfil')||0));
 
-  const maxViews = Math.max(...views);
-  const avgViews = avg(views);
-  const totalClicks = clicks.reduce((a,b) => a+b, 0);
-  const totalProfile = profileVisits.reduce((a,b) => a+b, 0);
-
-  document.getElementById('st-views-max').textContent = fmtNum(maxViews);
-  document.getElementById('st-views-avg').textContent = fmtNum(Math.round(avgViews));
-  document.getElementById('st-clicks').textContent = fmtNum(totalClicks);
-  document.getElementById('st-profile').textContent = fmtNum(totalProfile);
+  document.getElementById('st-views-max').textContent   = fmtNum(Math.max(...views));
+  document.getElementById('st-views-avg').textContent   = fmtNum(Math.round(avg(views)));
+  document.getElementById('st-clicks-max').textContent  = fmtNum(Math.max(...clicks));
+  document.getElementById('st-clicks-avg').textContent  = fmtNum(Math.round(avg(clicks)));
+  document.getElementById('st-profile-max').textContent = fmtNum(Math.max(...profile));
+  document.getElementById('st-profile-avg').textContent = fmtNum(Math.round(avg(profile)));
 }
 
 function renderComments(rows) {
