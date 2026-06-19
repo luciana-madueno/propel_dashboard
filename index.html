@@ -5,66 +5,62 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Engagement en Social Media Q2</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
   :root {
     --blue-dark: #2c59b7;
     --blue-mid: #486ec8;
     --blue-light: #618ece;
     --orange: #eb9f4f;
     --red: #fc5c3a;
-    --bg: #f7f8fa;
+    --bg: #f4f6fb;
     --surface: #ffffff;
-    --border: #e8eaed;
+    --border: #e4e8f0;
     --text-primary: #1a1d23;
     --text-secondary: #5f6470;
     --text-tertiary: #9ca3af;
-    --radius: 12px;
-    --radius-sm: 8px;
+    --radius: 14px;
+    --radius-sm: 9px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); font-size: 14px; }
   .dashboard { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
 
-  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
-  .header-left h1 { font-size: 20px; font-weight: 600; }
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid var(--blue-dark); }
+  .header-left h1 { font-size: 22px; font-weight: 700; color: var(--blue-dark); letter-spacing: -0.3px; }
   .header-left p { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
-  .badge { font-size: 11px; padding: 5px 12px; border-radius: 99px; background: var(--surface); border: 1px solid var(--border); color: var(--text-secondary); font-weight: 500; }
+  .badge { font-size: 11px; padding: 5px 14px; border-radius: 99px; background: var(--blue-dark); color: #fff; font-weight: 600; letter-spacing: 0.02em; }
 
   .loading { text-align: center; padding: 32px; color: var(--text-secondary); font-size: 13px; }
 
   .scorecards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-  .scorecard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
-  .scorecard .val { font-size: 32px; font-weight: 600; line-height: 1; }
+  .scorecard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(44,89,183,0.06); }
+  .scorecard .val { font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -0.5px; }
   .scorecard .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
   .scorecard .sub { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
   .val-ig { color: var(--red); }
   .val-lk { color: var(--blue-dark); }
 
   .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; }
-  .chart-title { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
-  .chart-sub { font-size: 11px; color: var(--text-secondary); margin-bottom: 14px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(44,89,183,0.06); }
+  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; color: var(--text-primary); }
+  .chart-sub { font-size: 11px; color: var(--text-tertiary); margin-bottom: 14px; }
   .chart-wrap { height: 160px; position: relative; }
 
-  .section-hd { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-secondary); margin-bottom: 12px; }
+  .section-hd { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-dark); margin-bottom: 12px; }
   .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 
-  .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 14px; }
-  .tab { padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--text-secondary); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: all 0.15s; }
-  .tab.active-ig { color: var(--red); border-bottom-color: var(--red); }
-  .tab.active-lk { color: var(--blue-dark); border-bottom-color: var(--blue-dark); }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 14px; gap: 4px; }
+  .tab { padding: 8px 18px; font-size: 13px; font-weight: 500; color: var(--text-secondary); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: all 0.15s; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+  .tab:hover { background: var(--bg); color: var(--text-primary); }
+  .tab.active-ig { color: var(--red); border-bottom-color: var(--red); background: #fff5f3; }
+  .tab.active-lk { color: var(--blue-dark); border-bottom-color: var(--blue-dark); background: #f0f4ff; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
   .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.15s; }
-  .post-card:hover { border-color: #c5ccd8; }
+  .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.15s, border-color 0.15s; box-shadow: 0 1px 4px rgba(44,89,183,0.06); }
+  .post-card:hover { border-color: var(--blue-light); box-shadow: 0 4px 16px rgba(44,89,183,0.12); }
 
-  /* Imagen real del post */
-  .post-thumb-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
-  .post-thumb-img.lk { aspect-ratio: 16/9; }
-
-  /* Fallback cuando no hay imagen */
   .post-thumb { width: 100%; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start; padding: 12px; }
   .post-thumb.lk-thumb { aspect-ratio: 16/9; }
   .post-thumb.ig-thumb { aspect-ratio: 1/1; }
@@ -73,46 +69,47 @@
   .thumb-author { position: absolute; bottom: 8px; left: 12px; font-size: 9px; color: rgba(255,255,255,0.8); }
   .thumb-tri { position: absolute; bottom: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 0 40px 40px; border-color: transparent transparent rgba(255,255,255,0.15) transparent; }
 
-  .post-body { padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+  .post-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
   .post-meta { display: flex; align-items: center; justify-content: space-between; }
-  .post-rank { font-size: 10px; font-weight: 500; color: var(--text-tertiary); }
+  .post-rank { font-size: 10px; font-weight: 700; color: var(--blue-dark); background: #f0f4ff; padding: 2px 7px; border-radius: 99px; }
   .post-date { font-size: 10px; color: var(--text-tertiary); }
-  .post-title { font-size: 11px; font-weight: 500; color: var(--text-primary); line-height: 1.45; }
-  .post-metrics { display: flex; gap: 10px; padding-top: 6px; border-top: 1px solid var(--border); flex-wrap: wrap; }
-  .pm .v { font-size: 13px; font-weight: 600; color: var(--blue-dark); display: block; }
-  .pm .l { font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.04em; }
-  .post-insight { font-size: 10px; color: var(--text-secondary); background: var(--bg); padding: 5px 8px; border-radius: 0 6px 6px 0; line-height: 1.5; border-left: 2px solid var(--border); }
-  .post-insight.ig { border-left-color: var(--red); }
-  .post-insight.lk { border-left-color: var(--blue-mid); }
-  .post-link { font-size: 10px; color: var(--blue-dark); font-weight: 500; text-decoration: none; margin-top: auto; display: inline-flex; align-items: center; gap: 3px; }
+  .post-title { font-size: 12px; font-weight: 500; color: var(--text-primary); line-height: 1.5; }
+  .post-metrics { display: flex; gap: 12px; padding-top: 8px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+  .pm .v { font-size: 14px; font-weight: 700; color: var(--blue-dark); display: block; }
+  .pm .l { font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
+  .post-insight { font-size: 10px; color: var(--text-secondary); background: #f0f4ff; padding: 6px 9px; border-radius: 0 6px 6px 0; line-height: 1.5; border-left: 2px solid var(--blue-mid); }
+  .post-insight.ig { background: #fff5f3; border-left-color: var(--red); }
+  .post-link { font-size: 10px; color: var(--blue-dark); font-weight: 600; text-decoration: none; margin-top: auto; display: inline-flex; align-items: center; gap: 3px; }
+  .post-link:hover { color: var(--blue-mid); }
 
-  .story-thumb { width: 100%; padding: 24px 0; display: flex; align-items: center; justify-content: center; font-size: 26px; }
+  .story-thumb { width: 100%; padding: 24px 0; display: flex; align-items: center; justify-content: center; font-size: 26px; border-radius: var(--radius) var(--radius) 0 0; }
   .s1 { background: linear-gradient(160deg,#fde8e4,#fc5c3a); color:#fff; }
   .s2 { background: linear-gradient(160deg,#dce8f8,#2c59b7); color:#fff; }
   .s3 { background: linear-gradient(160deg,#fef3e2,#eb9f4f); color:#fff; }
 
-  .comment-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .comment-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(44,89,183,0.06); }
   .comment-header { display: flex; align-items: center; gap: 8px; }
-  .avatar { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
-  .commenter-name { font-size: 12px; font-weight: 500; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
+  .commenter-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
   .commenter-role { font-size: 10px; color: var(--text-tertiary); }
-  .net-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 99px; margin-left: auto; flex-shrink: 0; }
+  .net-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 99px; margin-left: auto; flex-shrink: 0; letter-spacing: 0.03em; }
   .net-badge.lk { background: #dce8f8; color: #2c59b7; }
   .net-badge.ig { background: #fde8e4; color: #fc5c3a; }
   .comment-text { font-size: 11px; color: var(--text-secondary); line-height: 1.6; font-style: italic; }
   .comment-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid var(--border); }
   .comment-ref { font-size: 10px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
   .comment-likes { font-size: 10px; color: var(--text-secondary); }
-  .comment-insight { font-size: 10px; color: var(--text-secondary); background: var(--bg); border-left: 2px solid var(--border); padding: 5px 8px; border-radius: 0 6px 6px 0; line-height: 1.5; }
+  .comment-insight { font-size: 10px; color: var(--text-secondary); background: #f0f4ff; border-left: 2px solid var(--blue-light); padding: 5px 8px; border-radius: 0 6px 6px 0; line-height: 1.5; }
 
   .links-list { display: flex; flex-direction: column; gap: 8px; }
-  .link-row { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; }
-  .link-rank { font-size: 11px; font-weight: 500; color: var(--text-tertiary); width: 18px; flex-shrink: 0; }
-  .link-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-  .link-name { font-size: 12px; font-weight: 500; }
-  .link-bar-track { background: var(--bg); border-radius: 99px; height: 4px; overflow: hidden; }
-  .link-bar-fill { height: 4px; border-radius: 99px; background: var(--orange); }
-  .link-clicks { font-size: 14px; font-weight: 600; color: var(--orange); white-space: nowrap; }
+  .link-row { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; box-shadow: 0 1px 3px rgba(44,89,183,0.05); transition: box-shadow 0.15s; }
+  .link-row:hover { box-shadow: 0 3px 10px rgba(44,89,183,0.1); }
+  .link-rank { font-size: 11px; font-weight: 700; color: var(--blue-dark); width: 18px; flex-shrink: 0; }
+  .link-info { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+  .link-name { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+  .link-bar-track { background: #f0f4ff; border-radius: 99px; height: 5px; overflow: hidden; }
+  .link-bar-fill { height: 5px; border-radius: 99px; background: linear-gradient(90deg, var(--blue-dark), var(--orange)); }
+  .link-clicks { font-size: 14px; font-weight: 700; color: var(--orange); white-space: nowrap; }
 </style>
 </head>
 <body>
@@ -267,43 +264,65 @@ function buildChartEng(id, data, color, label) {
           label: 'Engagement cierre',
           data: data.map(d => d.cierre),
           borderColor: color,
-          backgroundColor: color + '18',
-          borderWidth: 2.5,
-          pointRadius: 5,
+          backgroundColor: (ctx) => {
+            const chart = ctx.chart;
+            const {ctx: c, chartArea} = chart;
+            if (!chartArea) return color + '10';
+            const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+            gradient.addColorStop(0, color + '30');
+            gradient.addColorStop(1, color + '00');
+            return gradient;
+          },
+          borderWidth: 2,
+          pointRadius: (ctx) => ctx.dataIndex === data.length - 1 ? 6 : 0,
           pointBackgroundColor: color,
           pointBorderColor: '#fff',
           pointBorderWidth: 2,
-          tension: 0.35,
+          tension: 0.4,
           fill: true
         },
         {
           label: 'Meta',
           data: data.map(d => d.meta),
-          borderColor: color + '66',
+          borderColor: color + '55',
           borderWidth: 1.5,
-          borderDash: [5, 4],
+          borderDash: [4, 4],
           pointRadius: 0,
-          tension: 0,
+          tension: 0.4,
           fill: false
         }
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
-        legend: { display: true, position: 'top', align: 'start', labels: { boxWidth: 12, font: { size: 11 }, color: '#5f6470' } },
+        legend: {
+          display: true,
+          position: 'top',
+          align: 'end',
+          labels: { boxWidth: 10, boxHeight: 2, font: { size: 10 }, color: '#9ca3af', padding: 12 }
+        },
         tooltip: {
-          callbacks: {
-            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}`
-          }
+          backgroundColor: '#1a1d23',
+          titleColor: '#fff',
+          bodyColor: '#9ca3af',
+          padding: 10,
+          cornerRadius: 8,
+          callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}` }
         }
       },
       scales: {
-        x: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { font: { size: 11 }, color: '#9ca3af' } },
+        x: {
+          grid: { display: false },
+          border: { display: false },
+          ticks: { font: { size: 10 }, color: '#9ca3af', maxRotation: 0 }
+        },
         y: {
-          grid: { color: 'rgba(0,0,0,0.05)' },
-          ticks: { font: { size: 11 }, color: '#9ca3af' },
-          title: { display: true, text: 'Engagement cierre', color: color, font: { size: 11 } }
+          grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
+          border: { display: false, dash: [3,3] },
+          ticks: { font: { size: 10 }, color: '#9ca3af', padding: 8 },
+          title: { display: false }
         }
       }
     }
