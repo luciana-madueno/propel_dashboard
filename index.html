@@ -175,10 +175,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script>
-const URL_IG = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSpnP5f1EXRVruAK0OJrAv1LFxm66IRm0_QgtECzO5-27SQq7Jb06j2GVqzV9yNSKnq3dpIXWlHqgFg/pub?output=csv';
-const URL_LK = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTDIzq58bIVhbxytyVRo-t3rBJ2ZAfIy4JgLW_r2JCnwikpgvUQcgdWpOCZxQsIADG2m2-DBpPl4Um7/pub?gid=1590584966&single=true&output=csv';
-const URL_CM = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTZXUBbsWEIZ07eLMhRw28FQpM3bwhDT8uQssuoaiFMGgKJOzrlHkYP2iRJFrKnLU5tb6ZZFZEKaxcR/pub?output=csv';
-const URL_LT = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSc0EKKEziPp7qgteZDcppiJDhp52PFPyz46gSRcKxlLyr6OgfSW4Ztuf9Nc4qDUVf8eXYvxnpparFH/pub?output=csv';
+const URL_IG       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=583930079&single=true&output=csv';
+const URL_LK       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=231631439&single=true&output=csv';
+const URL_CM       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=1592318439&single=true&output=csv';
+const URL_LT       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=788344558&single=true&output=csv';
+const URL_STORIES  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=1157588083&single=true&output=csv';
+const URL_ENG      = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=300532583&single=true&output=csv';
 
 function fetchCSV(url) {
   return new Promise((resolve, reject) => {
@@ -208,14 +210,8 @@ function tasa(r) {
   return parseFloat(v||0);
 }
 
-function isIGPost(r) {
-  const t = (key(r,'tipo','Tipo')||'').toLowerCase();
-  return t.includes('secuencia') || t.includes('post') || t.includes('imagen') || t.includes('video') || t.includes('reel') || t.includes('carrusel');
-}
-function isIGStory(r) {
-  const t = (key(r,'tipo','Tipo')||'').toLowerCase();
-  return t.includes('historia') || t.includes('story');
-}
+function isIGPost(r) { return true; }
+function isIGStory(r) { return false; }
 
 function fmtFecha(raw) {
   if (!raw) return '';
@@ -358,10 +354,10 @@ function renderLKPosts(rows) {
 }
 
 function renderStories(rows) {
-  const stories = rows.filter(isIGStory)
-    .sort((a,b) => parseFloat(key(b,'alcance','Alcance')||0) - parseFloat(key(a,'alcance','Alcance')||0))
+  const stories = rows
+    .sort((a,b) => parseFloat(key(b,'alcance','Alcance','vistas','Vistas')||0) - parseFloat(key(a,'alcance','Alcance','vistas','Vistas')||0))
     .slice(0,3);
-  if (!stories.length) { document.getElementById('cards-stories').innerHTML = '<div class="loading">No se encontraron historias en la Sheet de Instagram</div>'; return; }
+  if (!stories.length) { document.getElementById('cards-stories').innerHTML = '<div class="loading">No se encontraron historias en la Sheet</div>'; return; }
   document.getElementById('cards-stories').innerHTML = stories.map((s,i) => `
     <div class="post-card">
       <div class="story-thumb ${storyClasses[i]}">${storyIcons[i]}</div>
@@ -369,7 +365,7 @@ function renderStories(rows) {
         <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${fmtFecha(key(s,'fecha','Fecha'))}</span></div>
         <div class="post-title">${key(s,'titulo','Titulo','título')}</div>
         <div class="post-metrics">
-          <div class="pm"><span class="v">${fmtNum(key(s,'alcance','Alcance'))}</span><span class="l">Vistas</span></div>
+          <div class="pm"><span class="v">${fmtNum(key(s,'alcance','Alcance','vistas','Vistas'))}</span><span class="l">Vistas</span></div>
           <div class="pm"><span class="v">${fmt(tasa(s))}</span><span class="l">Tasa inter.</span></div>
         </div>
         ${key(s,'insight','Insight') ? `<div class="post-insight ig">${key(s,'insight','Insight')}</div>` : ''}
@@ -421,13 +417,13 @@ function renderLinktree(rows) {
 }
 
 function updateScorecards(igRows, lkRows) {
-  const igPosts = igRows.filter(isIGPost);
-  const totalPosts = igPosts.length + lkRows.length;
-  const igEng = avg(igPosts.map(r => tasa(r)));
+  // Contar todos los registros sin filtrar por tipo
+  const totalPosts = igRows.length + lkRows.length;
+  const igEng = avg(igRows.map(r => tasa(r)));
   const lkEng = avg(lkRows.map(r => tasa(r)));
 
   document.getElementById('sc-posts').textContent = totalPosts;
-  document.getElementById('sc-posts-sub').textContent = `${lkRows.length} LK · ${igPosts.length} IG`;
+  document.getElementById('sc-posts-sub').textContent = `${lkRows.length} LK · ${igRows.length} IG`;
   document.getElementById('sc-ig').textContent = fmt(igEng);
   document.getElementById('sc-lk').textContent = fmt(lkEng);
 
@@ -445,22 +441,26 @@ function updateScorecards(igRows, lkRows) {
 
 async function init() {
   try {
-    const [igRows, lkRows, cmRows, ltRows] = await Promise.all([
-      fetchCSV(URL_IG), fetchCSV(URL_LK), fetchCSV(URL_CM), fetchCSV(URL_LT)
+    const [igRows, lkRows, cmRows, ltRows, storiesRows, engRows] = await Promise.all([
+      fetchCSV(URL_IG), fetchCSV(URL_LK), fetchCSV(URL_CM), fetchCSV(URL_LT),
+      fetchCSV(URL_STORIES), fetchCSV(URL_ENG)
     ]);
 
     updateScorecards(igRows, lkRows);
 
     if (chartIG) chartIG.destroy();
     if (chartLK) chartLK.destroy();
-    const igWeeks = groupByWeek(igRows.filter(isIGPost), tasa);
-    const lkWeeks = groupByWeek(lkRows, tasa);
+    // Usar sheet de engagement para las gráficas si tiene datos, si no usar posts
+    const igChartRows = engRows.length ? engRows.filter(r => (key(r,'red','Red')||'').toLowerCase().includes('ig') || (key(r,'red','Red')||'').toLowerCase().includes('instagram')) : igRows;
+    const lkChartRows = engRows.length ? engRows.filter(r => (key(r,'red','Red')||'').toLowerCase().includes('lk') || (key(r,'red','Red')||'').toLowerCase().includes('linkedin')) : lkRows;
+    const igWeeks = groupByWeek(igChartRows.length ? igChartRows : igRows, tasa);
+    const lkWeeks = groupByWeek(lkChartRows.length ? lkChartRows : lkRows, tasa);
     if (igWeeks.length) chartIG = buildChart('chartIG', igWeeks, '#fc5c3a');
     if (lkWeeks.length) chartLK = buildChart('chartLK', lkWeeks, '#2c59b7');
 
     renderIGPosts(igRows);
     renderLKPosts(lkRows);
-    renderStories(igRows);
+    renderStories(storiesRows);
     renderComments(cmRows);
     renderLinktree(ltRows);
 
