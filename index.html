@@ -269,11 +269,32 @@ function key(row, ...names) {
   return '';
 }
 
+// Helpers para tipo de contenido IG
+function isIGPost(r) {
+  const t = (key(r,'tipo','Tipo')||'').toLowerCase();
+  return t.includes('secuencia') || t.includes('post') || t.includes('imagen') || t.includes('video') || t.includes('reel');
+}
+function isIGStory(r) {
+  const t = (key(r,'tipo','Tipo')||'').toLowerCase();
+  return t.includes('historia') || t.includes('story');
+}
+// Helper tasa de interacción — usa el campo real de la Sheet
+function tasa(r) {
+  return key(r,'tasa_de_interaccion','engagement_rate','Engagement Rate','tasa de interaccion','Tasa de interaccion') || '0';
+}
+// Formato de fecha legible
+function fmtFecha(raw) {
+  if (!raw) return '';
+  const d = new Date(raw);
+  if (isNaN(d)) return String(raw).slice(0,10);
+  return d.toLocaleDateString('es-MX', {day:'2-digit', month:'short', year:'numeric'});
+}
+
 function renderIGPosts(rows) {
-  const posts = rows.filter(r => (key(r,'tipo','Tipo')||'').toLowerCase() === 'post')
-    .sort((a,b) => parseFloat(key(b,'engagement_rate','Engagement Rate','engagementrate')||0) - parseFloat(key(a,'engagement_rate','Engagement Rate','engagementrate')||0))
+  const posts = rows.filter(isIGPost)
+    .sort((a,b) => parseFloat(tasa(b)||0) - parseFloat(tasa(a)||0))
     .slice(0,3);
-  if (!posts.length) { document.getElementById('cards-ig').innerHTML = '<div class="loading">No se encontraron posts de tipo "post" en la Sheet de Instagram</div>'; return; }
+  if (!posts.length) { document.getElementById('cards-ig').innerHTML = '<div class="loading">No se encontraron posts en la Sheet de Instagram</div>'; return; }
   document.getElementById('cards-ig').innerHTML = posts.map((p,i) => `
     <div class="post-card">
       <div class="post-thumb ig-thumb" style="background:${igGrads[i]}">
@@ -281,21 +302,21 @@ function renderIGPosts(rows) {
         <div class="thumb-title">${key(p,'titulo','Titulo','título')}</div>
       </div>
       <div class="post-body">
-        <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${key(p,'fecha','Fecha')}</span></div>
+        <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${fmtFecha(key(p,'fecha','Fecha'))}</span></div>
         <div class="post-title">${key(p,'titulo','Titulo','título')}</div>
         <div class="post-metrics">
           <div class="pm"><span class="v">${key(p,'alcance','Alcance')}</span><span class="l">Alcance</span></div>
           <div class="pm"><span class="v">${key(p,'guardados','Guardados')}</span><span class="l">Guardados</span></div>
-          <div class="pm"><span class="v">${fmt(key(p,'engagement_rate','Engagement Rate'))}%</span><span class="l">Eng.</span></div>
+          <div class="pm"><span class="v">${fmt(tasa(p))}%</span><span class="l">Tasa inter.</span></div>
         </div>
         ${key(p,'insight','Insight') ? `<div class="post-insight ig">${key(p,'insight','Insight')}</div>` : ''}
-        ${key(p,'url','URL') ? `<a class="post-link" href="${key(p,'url','URL')}" target="_blank">Ver post →</a>` : ''}
+        ${key(p,'thumbnail_url','url','URL') ? `<a class="post-link" href="${key(p,'thumbnail_url','url','URL')}" target="_blank">Ver post →</a>` : ''}
       </div>
     </div>`).join('');
 }
 
 function renderLKPosts(rows) {
-  const posts = rows.sort((a,b) => parseFloat(key(b,'engagement_rate','Engagement Rate')||0) - parseFloat(key(a,'engagement_rate','Engagement Rate')||0)).slice(0,3);
+  const posts = rows.sort((a,b) => parseFloat(tasa(b)||0) - parseFloat(tasa(a)||0)).slice(0,3);
   if (!posts.length) { document.getElementById('cards-lk').innerHTML = '<div class="loading">No se encontraron posts en la Sheet de LinkedIn</div>'; return; }
   document.getElementById('cards-lk').innerHTML = posts.map((p,i) => `
     <div class="post-card">
@@ -306,33 +327,33 @@ function renderLKPosts(rows) {
         <div class="thumb-tri"></div>
       </div>
       <div class="post-body">
-        <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${key(p,'fecha','Fecha')}</span></div>
+        <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${fmtFecha(key(p,'fecha','Fecha'))}</span></div>
         <div class="post-title">${key(p,'titulo','Titulo','título')}</div>
         <div class="post-metrics">
           <div class="pm"><span class="v">${key(p,'impresiones','Impresiones')}</span><span class="l">Imp.</span></div>
           <div class="pm"><span class="v">${key(p,'clics','Clics')}</span><span class="l">Clics</span></div>
-          <div class="pm"><span class="v">${fmt(key(p,'engagement_rate','Engagement Rate'))}%</span><span class="l">Inter.</span></div>
+          <div class="pm"><span class="v">${fmt(tasa(p))}%</span><span class="l">Tasa inter.</span></div>
         </div>
         ${key(p,'insight','Insight') ? `<div class="post-insight lk">${key(p,'insight','Insight')}</div>` : ''}
-        ${key(p,'url','URL') ? `<a class="post-link" href="${key(p,'url','URL')}" target="_blank">Ver post →</a>` : ''}
+        ${key(p,'url','URL','thumbnail_url') ? `<a class="post-link" href="${key(p,'url','URL','thumbnail_url')}" target="_blank">Ver post →</a>` : ''}
       </div>
     </div>`).join('');
 }
 
 function renderStories(rows) {
-  const stories = rows.filter(r => (key(r,'tipo','Tipo')||'').toLowerCase() === 'story')
+  const stories = rows.filter(isIGStory)
     .sort((a,b) => parseFloat(key(b,'alcance','Alcance')||0) - parseFloat(key(a,'alcance','Alcance')||0))
     .slice(0,3);
-  if (!stories.length) { document.getElementById('cards-stories').innerHTML = '<div class="loading">No se encontraron historias de tipo "story" en la Sheet de Instagram</div>'; return; }
+  if (!stories.length) { document.getElementById('cards-stories').innerHTML = '<div class="loading">No se encontraron historias en la Sheet de Instagram</div>'; return; }
   document.getElementById('cards-stories').innerHTML = stories.map((s,i) => `
     <div class="post-card">
       <div class="story-thumb ${storyClasses[i]}">${storyIcons[i]}</div>
       <div class="post-body">
-        <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${key(s,'fecha','Fecha')}</span></div>
+        <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${fmtFecha(key(s,'fecha','Fecha'))}</span></div>
         <div class="post-title">${key(s,'titulo','Titulo','título')}</div>
         <div class="post-metrics">
           <div class="pm"><span class="v">${key(s,'alcance','Alcance')}</span><span class="l">Vistas</span></div>
-          <div class="pm"><span class="v">${fmt(key(s,'engagement_rate','Engagement Rate'))}%</span><span class="l">Eng.</span></div>
+          <div class="pm"><span class="v">${fmt(tasa(s))}%</span><span class="l">Tasa inter.</span></div>
         </div>
         ${key(s,'insight','Insight') ? `<div class="post-insight ig">${key(s,'insight','Insight')}</div>` : ''}
       </div>
@@ -384,23 +405,26 @@ function renderLinktree(rows) {
 }
 
 function updateScorecards(igRows, lkRows) {
-  const igPosts = igRows.filter(r=>(key(r,'tipo','Tipo')||'').toLowerCase()==='post');
+  const igPosts = igRows.filter(isIGPost);
   const totalPosts = igPosts.length + lkRows.length;
-  const igEng = avg(igPosts.map(r=>key(r,'engagement_rate','Engagement Rate')));
-  const lkEng = avg(lkRows.map(r=>key(r,'engagement_rate','Engagement Rate')));
+  const igEng = avg(igPosts.map(r=>tasa(r)));
+  const lkEng = avg(lkRows.map(r=>tasa(r)));
 
   document.getElementById('sc-posts').textContent = totalPosts;
   document.getElementById('sc-posts-sub').textContent = `${lkRows.length} LK · ${igPosts.length} IG`;
   document.getElementById('sc-ig').textContent = fmt(igEng)+'%';
   document.getElementById('sc-lk').textContent = fmt(lkEng)+'%';
 
-  const allDates = [...igRows,...lkRows].map(r=>key(r,'fecha','Fecha')).filter(Boolean).sort();
+  // Período — solo mostrar mes/año
+  const allDates = [...igRows,...lkRows].map(r=>key(r,'fecha','Fecha')).filter(Boolean)
+    .map(d => new Date(d)).filter(d=>!isNaN(d)).sort((a,b)=>a-b);
   if (allDates.length) {
-    const first = allDates[0].slice(0,7);
-    const last = allDates[allDates.length-1].slice(0,7);
+    const opts = {month:'short', year:'numeric'};
+    const first = allDates[0].toLocaleDateString('es-MX', opts);
+    const last = allDates[allDates.length-1].toLocaleDateString('es-MX', opts);
     document.getElementById('badge-period').textContent = first===last ? first : `${first} → ${last}`;
   } else {
-    document.getElementById('badge-period').textContent = 'Período actual';
+    document.getElementById('badge-period').textContent = 'Q2 2026';
   }
 }
 
@@ -417,8 +441,8 @@ async function init() {
 
     if (chartIG) chartIG.destroy();
     if (chartLK) chartLK.destroy();
-    const igWeeks = groupByWeek(igRows.filter(r=>(key(r,'tipo','Tipo')||'').toLowerCase()==='post'), 'engagement_rate');
-    const lkWeeks = groupByWeek(lkRows, 'engagement_rate');
+    const igWeeks = groupByWeek(igRows.filter(isIGPost), 'tasa_de_interaccion');
+    const lkWeeks = groupByWeek(lkRows, 'tasa_de_interaccion');
     if (igWeeks.length) chartIG = buildChart('chartIG', igWeeks, '#fc5c3a');
     if (lkWeeks.length) chartLK = buildChart('chartLK', lkWeeks, '#2c59b7');
 
