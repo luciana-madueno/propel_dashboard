@@ -12,9 +12,10 @@
     --blue-light: #618ece;
     --orange: #eb9f4f;
     --red: #fc5c3a;
-    --bg: #f4f6fb;
+    --bg: #ffffff;
     --surface: #ffffff;
-    --border: #e4e8f0;
+    --bg-soft: #fdf8f5;
+    --border: #ede8e3;
     --text-primary: #1a1d23;
     --text-secondary: #5f6470;
     --text-tertiary: #9ca3af;
@@ -25,90 +26,84 @@
   body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); font-size: 14px; }
   .dashboard { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
 
-  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid var(--blue-dark); }
-  .header-left h1 { font-size: 22px; font-weight: 700; color: var(--blue-dark); letter-spacing: -0.3px; }
+  /* HEADER */
+  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid var(--orange); }
+  .header-left h1 { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
   .header-left p { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
-  .badge { font-size: 11px; padding: 5px 14px; border-radius: 99px; background: var(--blue-dark); color: #fff; font-weight: 600; letter-spacing: 0.02em; }
+  .badge { font-size: 11px; padding: 5px 14px; border-radius: 99px; background: var(--orange); color: #fff; font-weight: 600; }
 
   .loading { text-align: center; padding: 32px; color: var(--text-secondary); font-size: 13px; }
 
+  /* SCORECARDS */
   .scorecards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-  .scorecard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(44,89,183,0.06); }
+  .scorecard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(235,159,79,0.08); }
   .scorecard .val { font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -0.5px; }
   .scorecard .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
   .scorecard .sub { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
   .val-ig { color: var(--red); }
   .val-lk { color: var(--blue-dark); }
+  .val-orange { color: var(--orange); }
 
+  /* CHARTS */
   .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(44,89,183,0.06); }
-  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; color: var(--text-primary); }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(235,159,79,0.08); }
+  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
   .chart-sub { font-size: 11px; color: var(--text-tertiary); margin-bottom: 14px; }
-  .chart-wrap { height: 160px; position: relative; }
+  .chart-wrap { height: 170px; position: relative; }
 
-  .section-hd { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-dark); margin-bottom: 12px; }
+  /* SECTION */
+  .section-hd { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange); margin-bottom: 12px; }
   .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
 
+  /* TABS */
   .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 14px; gap: 4px; }
   .tab { padding: 8px 18px; font-size: 13px; font-weight: 500; color: var(--text-secondary); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: all 0.15s; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
-  .tab:hover { background: var(--bg); color: var(--text-primary); }
+  .tab:hover { background: var(--bg-soft); color: var(--text-primary); }
   .tab.active-ig { color: var(--red); border-bottom-color: var(--red); background: #fff5f3; }
   .tab.active-lk { color: var(--blue-dark); border-bottom-color: var(--blue-dark); background: #f0f4ff; }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
 
+  /* POST CARDS */
   .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-  .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.15s, border-color 0.15s; box-shadow: 0 1px 4px rgba(44,89,183,0.06); }
-  .post-card:hover { border-color: var(--blue-light); box-shadow: 0 4px 16px rgba(44,89,183,0.12); }
-
-  .post-thumb { width: 100%; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-start; padding: 12px; }
-  .post-thumb.lk-thumb { aspect-ratio: 16/9; }
-  .post-thumb.ig-thumb { aspect-ratio: 1/1; }
-  .thumb-logo { position: absolute; top: 8px; right: 8px; font-size: 9px; background: rgba(255,255,255,0.2); padding: 2px 7px; border-radius: 4px; color: #fff; font-weight: 600; }
-  .thumb-title { font-size: 13px; font-weight: 500; color: #fff; line-height: 1.4; margin-top: 22px; }
-  .thumb-author { position: absolute; bottom: 8px; left: 12px; font-size: 9px; color: rgba(255,255,255,0.8); }
-  .thumb-tri { position: absolute; bottom: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 0 40px 40px; border-color: transparent transparent rgba(255,255,255,0.15) transparent; }
-
+  .post-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; transition: box-shadow 0.15s, border-color 0.15s; box-shadow: 0 1px 4px rgba(235,159,79,0.07); }
+  .post-card:hover { border-color: var(--orange); box-shadow: 0 4px 16px rgba(235,159,79,0.15); }
   .post-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
   .post-meta { display: flex; align-items: center; justify-content: space-between; }
-  .post-rank { font-size: 10px; font-weight: 700; color: var(--blue-dark); background: #f0f4ff; padding: 2px 7px; border-radius: 99px; }
+  .post-rank { font-size: 10px; font-weight: 700; color: var(--orange); background: #fff8f0; padding: 2px 7px; border-radius: 99px; }
   .post-date { font-size: 10px; color: var(--text-tertiary); }
   .post-title { font-size: 12px; font-weight: 500; color: var(--text-primary); line-height: 1.5; }
   .post-metrics { display: flex; gap: 12px; padding-top: 8px; border-top: 1px solid var(--border); flex-wrap: wrap; }
-  .pm .v { font-size: 14px; font-weight: 700; color: var(--blue-dark); display: block; }
+  .pm .v { font-size: 14px; font-weight: 700; color: var(--orange); display: block; }
   .pm .l { font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
-  .post-insight { font-size: 10px; color: var(--text-secondary); background: #f0f4ff; padding: 6px 9px; border-radius: 0 6px 6px 0; line-height: 1.5; border-left: 2px solid var(--blue-mid); }
+  .post-insight { font-size: 10px; color: var(--text-secondary); background: #fff8f0; padding: 6px 9px; border-radius: 0 6px 6px 0; line-height: 1.5; border-left: 2px solid var(--orange); }
   .post-insight.ig { background: #fff5f3; border-left-color: var(--red); }
-  .post-link { font-size: 10px; color: var(--blue-dark); font-weight: 600; text-decoration: none; margin-top: auto; display: inline-flex; align-items: center; gap: 3px; }
-  .post-link:hover { color: var(--blue-mid); }
+  .post-link { font-size: 10px; color: var(--orange); font-weight: 600; text-decoration: none; margin-top: auto; display: inline-flex; align-items: center; gap: 3px; }
+  .post-link:hover { color: var(--red); }
 
-  .story-thumb { width: 100%; padding: 24px 0; display: flex; align-items: center; justify-content: center; font-size: 26px; border-radius: var(--radius) var(--radius) 0 0; }
-  .s1 { background: linear-gradient(160deg,#fde8e4,#fc5c3a); color:#fff; }
-  .s2 { background: linear-gradient(160deg,#dce8f8,#2c59b7); color:#fff; }
-  .s3 { background: linear-gradient(160deg,#fef3e2,#eb9f4f); color:#fff; }
-
-  .comment-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(44,89,183,0.06); }
+  /* COMMENT CARDS */
+  .comment-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(235,159,79,0.07); }
   .comment-header { display: flex; align-items: center; gap: 8px; }
   .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
   .commenter-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
   .commenter-role { font-size: 10px; color: var(--text-tertiary); }
-  .net-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 99px; margin-left: auto; flex-shrink: 0; letter-spacing: 0.03em; }
+  .net-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 99px; margin-left: auto; flex-shrink: 0; }
   .net-badge.lk { background: #dce8f8; color: #2c59b7; }
   .net-badge.ig { background: #fde8e4; color: #fc5c3a; }
-  .comment-text { font-size: 11px; color: var(--text-secondary); line-height: 1.6; font-style: italic; }
+  .comment-our { font-size: 11px; color: var(--text-primary); background: #fff8f0; border-left: 2px solid var(--orange); padding: 6px 9px; border-radius: 0 6px 6px 0; line-height: 1.5; font-weight: 500; }
+  .comment-response { font-size: 11px; color: var(--text-secondary); line-height: 1.6; font-style: italic; background: var(--bg-soft); padding: 6px 9px; border-radius: 6px; }
   .comment-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid var(--border); }
   .comment-ref { font-size: 10px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
-  .comment-likes { font-size: 10px; color: var(--text-secondary); }
-  .comment-insight { font-size: 10px; color: var(--text-secondary); background: #f0f4ff; border-left: 2px solid var(--blue-light); padding: 5px 8px; border-radius: 0 6px 6px 0; line-height: 1.5; }
 
+  /* LINKTREE */
   .links-list { display: flex; flex-direction: column; gap: 8px; }
-  .link-row { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; box-shadow: 0 1px 3px rgba(44,89,183,0.05); transition: box-shadow 0.15s; }
-  .link-row:hover { box-shadow: 0 3px 10px rgba(44,89,183,0.1); }
-  .link-rank { font-size: 11px; font-weight: 700; color: var(--blue-dark); width: 18px; flex-shrink: 0; }
+  .link-row { display: flex; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; transition: box-shadow 0.15s; }
+  .link-row:hover { box-shadow: 0 3px 10px rgba(235,159,79,0.12); border-color: var(--orange); }
+  .link-rank { font-size: 11px; font-weight: 700; color: var(--orange); width: 18px; flex-shrink: 0; }
   .link-info { flex: 1; display: flex; flex-direction: column; gap: 5px; }
   .link-name { font-size: 12px; font-weight: 500; color: var(--text-primary); }
-  .link-bar-track { background: #f0f4ff; border-radius: 99px; height: 5px; overflow: hidden; }
-  .link-bar-fill { height: 5px; border-radius: 99px; background: linear-gradient(90deg, var(--blue-dark), var(--orange)); }
+  .link-bar-track { background: #fff3e6; border-radius: 99px; height: 5px; overflow: hidden; }
+  .link-bar-fill { height: 5px; border-radius: 99px; background: linear-gradient(90deg, var(--orange), var(--red)); }
   .link-clicks { font-size: 14px; font-weight: 700; color: var(--orange); white-space: nowrap; }
 </style>
 </head>
@@ -124,7 +119,7 @@
   </div>
 
   <div class="scorecards">
-    <div class="scorecard"><div class="val" id="sc-posts">—</div><div class="lbl">Publicaciones</div><div class="sub" id="sc-posts-sub">—</div></div>
+    <div class="scorecard"><div class="val val-orange" id="sc-posts">—</div><div class="lbl">Publicaciones</div><div class="sub" id="sc-posts-sub">—</div></div>
     <div class="scorecard"><div class="val val-ig" id="sc-stories">—</div><div class="lbl">Historias</div><div class="sub">Instagram</div></div>
     <div class="scorecard"><div class="val val-lk" id="sc-comments">—</div><div class="lbl">Comentarios</div><div class="sub">IG + LinkedIn</div></div>
   </div>
@@ -157,28 +152,28 @@
 
   <hr class="divider">
   <div class="section-hd">Historias · Resumen del período</div>
-  <div class="scorecards" id="scorecards-stories">
+  <div class="scorecards">
     <div class="scorecard">
       <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Visualizaciones</div>
-      <div style="display:flex;gap:20px;align-items:flex-end;">
-        <div><div class="val val-ig" id="st-views-max">—</div><div class="lbl">Máx. por historia</div></div>
-        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-views-avg">—</div><div class="lbl">Promedio Q</div></div>
+      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
+        <div><div class="val val-orange" id="st-views-max">—</div><div class="lbl">Máx. historia</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--text-secondary)" id="st-views-avg">—</div><div class="lbl">Promedio Q</div></div>
       </div>
     </div>
     <div class="scorecard">
       <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Clics en el enlace</div>
-      <div style="display:flex;gap:20px;align-items:flex-end;">
-        <div><div class="val val-lk" id="st-clicks-total">—</div><div class="lbl">Total Q</div></div>
-        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-clicks-max">—</div><div class="lbl">Máx.</div></div>
-        <div><div style="font-size:22px;font-weight:600;color:var(--text-tertiary)" id="st-clicks-avg">—</div><div class="lbl">Promedio</div></div>
+      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
+        <div><div class="val val-orange" id="st-clicks-total">—</div><div class="lbl">Total Q</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--text-secondary)" id="st-clicks-max">—</div><div class="lbl">Máx.</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--text-tertiary)" id="st-clicks-avg">—</div><div class="lbl">Promedio</div></div>
       </div>
     </div>
     <div class="scorecard">
       <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Visitas al perfil</div>
-      <div style="display:flex;gap:20px;align-items:flex-end;">
-        <div><div class="val" id="st-profile-total">—</div><div class="lbl">Total Q</div></div>
-        <div><div style="font-size:22px;font-weight:600;color:var(--text-secondary)" id="st-profile-max">—</div><div class="lbl">Máx.</div></div>
-        <div><div style="font-size:22px;font-weight:600;color:var(--text-tertiary)" id="st-profile-avg">—</div><div class="lbl">Promedio</div></div>
+      <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
+        <div><div class="val val-orange" id="st-profile-total">—</div><div class="lbl">Total Q</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--text-secondary)" id="st-profile-max">—</div><div class="lbl">Máx.</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:var(--text-tertiary)" id="st-profile-avg">—</div><div class="lbl">Promedio</div></div>
       </div>
     </div>
   </div>
@@ -225,14 +220,12 @@ function key(row, ...names) {
   return '';
 }
 
-// Tasa de interacción — sin multiplicar por 100 (ya viene como número en la Sheet)
 function tasa(r) {
   const v = key(r,'tasa_de_interaccion','tasa_interaccion','tasa de interaccion','Tasa de interaccion','engagement_rate','Engagement Rate');
   return parseFloat(v||0);
 }
 
 function isIGPost(r) { return true; }
-function isIGStory(r) { return false; }
 
 function fmtFecha(raw) {
   if (!raw) return '';
@@ -249,7 +242,8 @@ function switchTab(net) {
 }
 
 let chartIG, chartLK;
-function buildChartEng(id, data, color, label) {
+
+function buildChartEng(id, data, color) {
   if (!data.length) return;
   const ctx = document.getElementById(id);
   return new Chart(ctx, {
@@ -269,12 +263,13 @@ function buildChartEng(id, data, color, label) {
             const {ctx: c, chartArea} = chart;
             if (!chartArea) return color + '10';
             const gradient = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
-            gradient.addColorStop(0, color + '30');
+            gradient.addColorStop(0, color + '28');
             gradient.addColorStop(1, color + '00');
             return gradient;
           },
           borderWidth: 2,
-          pointRadius: (ctx) => ctx.dataIndex === data.length - 1 ? 6 : 0,
+          pointRadius: 3,
+          pointHoverRadius: 6,
           pointBackgroundColor: color,
           pointBorderColor: '#fff',
           pointBorderWidth: 2,
@@ -288,6 +283,7 @@ function buildChartEng(id, data, color, label) {
           borderWidth: 1.5,
           borderDash: [4, 4],
           pointRadius: 0,
+          pointHoverRadius: 4,
           tension: 0.4,
           fill: false
         }
@@ -296,17 +292,18 @@ function buildChartEng(id, data, color, label) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: {
-          display: true,
-          position: 'top',
-          align: 'end',
+          display: true, position: 'top', align: 'end',
           labels: { boxWidth: 10, boxHeight: 2, font: { size: 10 }, color: '#9ca3af', padding: 12 }
         },
         tooltip: {
-          backgroundColor: '#1a1d23',
-          titleColor: '#fff',
-          bodyColor: '#9ca3af',
+          backgroundColor: '#fff',
+          titleColor: '#1a1d23',
+          bodyColor: '#5f6470',
+          borderColor: '#ede8e3',
+          borderWidth: 1,
           padding: 10,
           cornerRadius: 8,
           callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}` }
@@ -319,8 +316,8 @@ function buildChartEng(id, data, color, label) {
           ticks: { font: { size: 10 }, color: '#9ca3af', maxRotation: 0 }
         },
         y: {
-          grid: { color: 'rgba(0,0,0,0.04)', drawBorder: false },
-          border: { display: false, dash: [3,3] },
+          grid: { color: 'rgba(0,0,0,0.04)' },
+          border: { display: false },
           ticks: { font: { size: 10 }, color: '#9ca3af', padding: 8 },
           title: { display: false }
         }
@@ -331,45 +328,30 @@ function buildChartEng(id, data, color, label) {
 
 function parseEngRows(engRows, plataforma) {
   return engRows
-    .filter(r => {
-      const p = (key(r, 'Plataforma', 'plataforma') || '').toLowerCase();
-      return p.includes(plataforma);
-    })
+    .filter(r => (key(r,'Plataforma','plataforma')||'').toLowerCase().includes(plataforma))
     .map(r => ({
-      semana: key(r, 'Semana', 'semana'),
-      cierre: parseFloat(key(r, 'Engagement cierre') || 0),
-      meta: parseFloat(key(r, 'Meta') || 0)
+      semana: key(r,'Semana','semana'),
+      cierre: parseFloat(key(r,'Engagement cierre')||0),
+      meta: parseFloat(key(r,'Meta')||0)
     }))
     .filter(d => d.semana !== '')
-    .sort((a, b) => new Date(a.semana) - new Date(b.semana));
+    .sort((a,b) => new Date(a.semana) - new Date(b.semana));
 }
 
-const igGrads = [
-  'linear-gradient(135deg,#fc5c3a,#eb9f4f)',
-  'linear-gradient(135deg,#486ec8,#fc5c3a)',
-  'linear-gradient(135deg,#2c59b7,#618ece)'
-];
-const lkColors = ['#2c59b7','#486ec8','#618ece'];
 const avatarColors = [
-  {bg:'#dce8f8',color:'#2c59b7'},
+  {bg:'#fff3e6',color:'#eb9f4f'},
   {bg:'#fde8e4',color:'#fc5c3a'},
-  {bg:'#dce8f8',color:'#486ec8'}
+  {bg:'#dce8f8',color:'#2c59b7'}
 ];
-const storyClasses = ['s1','s2','s3'];
-const storyIcons = ['📊','💡','🎙️'];
 
 function thumbIG(p, i) { return ''; }
 function thumbLK(p, i) { return ''; }
 
-// IG: ordenar por tasa de interacción
 function renderIGPosts(rows) {
-  const posts = rows.filter(isIGPost)
-    .sort((a,b) => tasa(b) - tasa(a))
-    .slice(0,3);
+  const posts = rows.sort((a,b) => tasa(b) - tasa(a)).slice(0,3);
   if (!posts.length) { document.getElementById('cards-ig').innerHTML = '<div class="loading">No se encontraron posts en la Sheet de Instagram</div>'; return; }
   document.getElementById('cards-ig').innerHTML = posts.map((p,i) => `
     <div class="post-card">
-      ${thumbIG(p,i)}
       <div class="post-body">
         <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${fmtFecha(key(p,'fecha','Fecha'))}</span></div>
         <div class="post-title">${key(p,'titulo','Titulo','título')}</div>
@@ -384,15 +366,11 @@ function renderIGPosts(rows) {
     </div>`).join('');
 }
 
-// LK: ordenar por impresiones
 function renderLKPosts(rows) {
-  const posts = rows
-    .sort((a,b) => parseFloat(key(b,'impresiones','Impresiones')||0) - parseFloat(key(a,'impresiones','Impresiones')||0))
-    .slice(0,3);
+  const posts = rows.sort((a,b) => parseFloat(key(b,'impresiones','Impresiones')||0) - parseFloat(key(a,'impresiones','Impresiones')||0)).slice(0,3);
   if (!posts.length) { document.getElementById('cards-lk').innerHTML = '<div class="loading">No se encontraron posts en la Sheet de LinkedIn</div>'; return; }
   document.getElementById('cards-lk').innerHTML = posts.map((p,i) => `
     <div class="post-card">
-      ${thumbLK(p,i)}
       <div class="post-body">
         <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${fmtFecha(key(p,'fecha','Fecha'))}</span></div>
         <div class="post-title">${key(p,'titulo','Titulo','título')}</div>
@@ -401,7 +379,7 @@ function renderLKPosts(rows) {
           <div class="pm"><span class="v">${fmtNum(key(p,'clics','Clics'))}</span><span class="l">Clics</span></div>
           <div class="pm"><span class="v">${Math.round(tasa(p))}</span><span class="l">Tasa inter.</span></div>
         </div>
-        ${key(p,'insight','Insight') ? `<div class="post-insight lk">${key(p,'insight','Insight')}</div>` : ''}
+        ${key(p,'insight','Insight') ? `<div class="post-insight">${key(p,'insight','Insight')}</div>` : ''}
         ${key(p,'url','URL','thumbnail_url') ? `<a class="post-link" href="${key(p,'url','URL','thumbnail_url')}" target="_blank">Ver post →</a>` : ''}
       </div>
     </div>`).join('');
@@ -414,11 +392,9 @@ function renderStories(rows) {
     });
     return;
   }
-
   const views   = rows.map(r => parseFloat(key(r,'Visualizaciones','visualizaciones')||0));
   const clicks  = rows.map(r => parseFloat(key(r,'Clics en el enlace','clics_enlace')||0));
   const profile = rows.map(r => parseFloat(key(r,'Visitas al perfil','visitas_perfil')||0));
-
   const sum = arr => arr.reduce((a,b) => a+b, 0);
 
   document.getElementById('st-views-max').textContent    = fmtNum(Math.max(...views));
@@ -433,7 +409,7 @@ function renderStories(rows) {
 
 function renderComments(rows) {
   const top = rows
-    .filter(r => (key(r,'Top Respuestas','top respuestas')||'').toLowerCase().includes('sí') || 
+    .filter(r => (key(r,'Top Respuestas','top respuestas')||'').toLowerCase().includes('sí') ||
                  (key(r,'Top Respuestas','top respuestas')||'').toLowerCase().includes('si'))
     .slice(0,3);
   if (!top.length) { document.getElementById('cards-comments').innerHTML = '<div class="loading">No hay comentarios marcados como Top Respuestas</div>'; return; }
@@ -442,11 +418,11 @@ function renderComments(rows) {
     const initials = org.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase() || '??';
     const ac = avatarColors[i];
     const red = (key(c,'Plataforma','plataforma')||'').toLowerCase().includes('instagram') ? 'ig' : 'lk';
-    const fecha = fmtFecha(key(c,'Fecha','fecha'));
     const comentario = key(c,'Comentario','comentario');
     const respuesta = key(c,'Respuesta 1','respuesta 1','Respuesta');
     const linkPost = key(c,'Link del post','link del post');
     const post = key(c,'Post','post');
+    const fecha = fmtFecha(key(c,'Fecha','fecha'));
     return `
     <div class="comment-card">
       <div class="comment-header">
@@ -458,8 +434,8 @@ function renderComments(rows) {
         <span class="net-badge ${red}">${red === 'ig' ? 'Instagram' : 'LinkedIn'}</span>
       </div>
       ${post ? `<div style="font-size:10px;color:var(--text-tertiary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">→ ${post}</div>` : ''}
-      ${comentario ? `<div style="font-size:11px;font-weight:500;color:var(--text-primary);line-height:1.5;">💬 ${comentario}</div>` : ''}
-      ${respuesta ? `<div class="comment-text">"${respuesta}"</div>` : ''}
+      ${comentario ? `<div class="comment-our">💬 ${comentario}</div>` : ''}
+      ${respuesta ? `<div class="comment-response">↩ "${respuesta}"</div>` : ''}
       <div class="comment-footer">
         ${linkPost ? `<a class="post-link" href="${linkPost}" target="_blank">Ver post →</a>` : '<span></span>'}
       </div>
@@ -486,8 +462,7 @@ function renderLinktree(rows) {
 }
 
 function updateScorecards(igRows, lkRows, storiesRows, cmRows) {
-  const totalPosts = igRows.length + lkRows.length;
-  document.getElementById('sc-posts').textContent = totalPosts;
+  document.getElementById('sc-posts').textContent = igRows.length + lkRows.length;
   document.getElementById('sc-posts-sub').textContent = `${lkRows.length} LK · ${igRows.length} IG`;
   document.getElementById('sc-stories').textContent = storiesRows.length;
   document.getElementById('sc-comments').textContent = cmRows.length;
@@ -497,7 +472,7 @@ function updateScorecards(igRows, lkRows, storiesRows, cmRows) {
   if (allDates.length) {
     const opts = {month:'short', year:'numeric'};
     const first = allDates[0].toLocaleDateString('es-MX', opts);
-    const last = allDates[allDates.length-1].toLocaleDateString('es-MX', opts);
+    const last  = allDates[allDates.length-1].toLocaleDateString('es-MX', opts);
     document.getElementById('badge-period').textContent = first===last ? first : `${first} → ${last}`;
   } else {
     document.getElementById('badge-period').textContent = 'Q2 2026';
@@ -517,8 +492,8 @@ async function init() {
     if (chartLK) chartLK.destroy();
     const igEngData = parseEngRows(engRows, 'instagram');
     const lkEngData = parseEngRows(engRows, 'linkedin');
-    if (igEngData.length) chartIG = buildChartEng('chartIG', igEngData, '#fc5c3a', 'Instagram');
-    if (lkEngData.length) chartLK = buildChartEng('chartLK', lkEngData, '#2c59b7', 'LinkedIn');
+    if (igEngData.length) chartIG = buildChartEng('chartIG', igEngData, '#fc5c3a');
+    if (lkEngData.length) chartLK = buildChartEng('chartLK', lkEngData, '#2c59b7');
 
     renderIGPosts(igRows);
     renderLKPosts(lkRows);
@@ -529,8 +504,8 @@ async function init() {
   } catch(e) {
     console.error(e);
     document.getElementById('badge-period').textContent = 'Error al cargar';
-    ['cards-ig','cards-lk','cards-stories','cards-comments'].forEach(id => {
-      document.getElementById(id).innerHTML = '<div class="loading" style="color:#c0392b">Error al cargar datos. Verifica que las Sheets estén publicadas como CSV.</div>';
+    ['cards-ig','cards-lk','cards-comments'].forEach(id => {
+      document.getElementById(id).innerHTML = '<div class="loading" style="color:#fc5c3a">Error al cargar datos. Verifica que las Sheets estén publicadas como CSV.</div>';
     });
   }
 }
