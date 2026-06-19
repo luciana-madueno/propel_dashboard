@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard de Comentarios Q2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  :root {
+    --blue-dark: #2c59b7;
+    --blue-mid: #486ec8;
+    --blue-light: #618ece;
+    --orange: #eb9f4f;
+    --red: #fc5c3a;
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --bg-soft: #fdf8f5;
+    --border: #ede8e3;
+    --text-secondary: #5f6470;
+    --text-tertiary: #9ca3af;
+    --radius: 14px;
+    --radius-sm: 9px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--bg); font-size: 14px; }
+  .dashboard { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
+
+  /* HEADER */
+  .header {
+    position: relative; background: var(--orange);
+    border-radius: var(--radius); margin-bottom: 24px;
+    padding: 32px 36px; overflow: hidden;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .header::before {
+    content: ''; position: absolute;
+    top: 0; right: 60px; bottom: 0; width: 90px;
+    background: var(--red);
+    clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  .header::after {
+    content: ''; position: absolute;
+    top: 0; right: 0; bottom: 0; width: 60px;
+    background: var(--blue-dark);
+  }
+  .header-left { position: relative; z-index: 1; }
+  .header-left h1 { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+  .header-left p { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+  .badge { position: relative; z-index: 1; font-size: 11px; padding: 5px 14px; border-radius: 99px; background: rgba(255,255,255,0.25); color: #fff; font-weight: 600; border: 1px solid rgba(255,255,255,0.3); }
+
+  .loading { text-align: center; padding: 32px; color: var(--text-secondary); font-size: 13px; }
+
+  /* SCORECARDS */
+  .scorecards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .scorecard { background: var(--orange); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 2px 8px rgba(235,159,79,0.25); }
+  .scorecard .val { font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -0.5px; color: #fff; }
+  .scorecard .lbl { font-size: 12px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+  .scorecard .sub { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 3px; }
+
+  /* CHARTS */
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(235,159,79,0.08); }
+  .chart-card.full { grid-column: 1 / -1; }
+  .chart-title { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 2px; }
+  .chart-sub { font-size: 11px; color: var(--text-tertiary); margin-bottom: 14px; }
+  .chart-wrap { height: 200px; position: relative; }
+  .chart-wrap.tall { height: 240px; }
+
+  .section-hd { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange); margin-bottom: 12px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+  /* NET LABEL */
+  .net-label { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 99px; margin-bottom: 10px; }
+  .net-label.ig { background: #fde8e4; color: var(--red); }
+  .net-label.lk { background: #dce8f8; color: var(--blue-dark); }
+</style>
+</head>
+<body>
+<div class="dashboard">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Dashboard de Comentarios Q2</h1>
+      <p>Instagram · LinkedIn</p>
+    </div>
+    <span class="badge" id="badge-period">Cargando...</span>
+  </div>
+
+  <!-- SCORECARDS -->
+  <div class="scorecards">
+    <div class="scorecard">
+      <div class="val" id="sc-total">—</div>
+      <div class="lbl">Comentarios totales</div>
+      <div class="sub" id="sc-total-sub">—</div>
+    </div>
+    <div class="scorecard">
+      <div class="val" id="sc-reacciones">—</div>
+      <div class="lbl">Reacciones recibidas</div>
+      <div class="sub">Total del período</div>
+    </div>
+    <div class="scorecard">
+      <div class="val" id="sc-respuestas">—</div>
+      <div class="lbl">Respuestas recibidas</div>
+      <div class="sub">Total del período</div>
+    </div>
+  </div>
+
+  <!-- BARCHART IG vs LK -->
+  <hr class="divider">
+  <div class="section-hd">Comentarios por red social</div>
+  <div class="chart-card" style="margin-bottom:24px;">
+    <div class="chart-title">Comentarios dados — Instagram vs LinkedIn</div>
+    <div class="chart-sub">Total de comentarios por plataforma</div>
+    <div class="chart-wrap"><canvas id="chartRedes"></canvas></div>
+  </div>
+
+  <!-- REACCIONES POR RED -->
+  <hr class="divider">
+  <div class="section-hd">Actividad por red social</div>
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="net-label ig">Instagram</div>
+      <div class="chart-title">Comentarios · Reacciones · Respuestas</div>
+      <div class="chart-sub">Conteo total por tipo de actividad</div>
+      <div class="chart-wrap tall"><canvas id="chartIG"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="net-label lk">LinkedIn</div>
+      <div class="chart-title">Comentarios · Reacciones · Respuestas</div>
+      <div class="chart-sub">Conteo total por tipo de actividad</div>
+      <div class="chart-wrap tall"><canvas id="chartLK"></canvas></div>
+    </div>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script>
+const URL_CM = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=1592318439&single=true&output=csv';
+
+function fetchCSV(url) {
+  return new Promise((resolve, reject) => {
+    Papa.parse(url, {
+      download: true, header: true, skipEmptyLines: true,
+      complete: r => resolve(r.data),
+      error: e => reject(e)
+    });
+  });
+}
+
+function key(row, ...names) {
+  for (const n of names) { if (row[n] !== undefined && row[n] !== '') return row[n]; }
+  return '';
+}
+
+function fmtNum(n) { return parseFloat(n||0).toLocaleString('es-MX'); }
+
+const chartDefaults = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: '#fff',
+      titleColor: '#5f6470',
+      bodyColor: '#5f6470',
+      borderColor: '#ede8e3',
+      borderWidth: 1,
+      padding: 10,
+      cornerRadius: 8
+    }
+  },
+  scales: {
+    x: {
+      grid: { display: false },
+      border: { display: false },
+      ticks: { font: { size: 11 }, color: '#9ca3af' }
+    },
+    y: {
+      grid: { color: 'rgba(0,0,0,0.04)' },
+      border: { display: false },
+      ticks: { font: { size: 11 }, color: '#9ca3af', padding: 8, stepSize: 1 },
+      title: { display: true, text: 'Record count', color: '#9ca3af', font: { size: 10 } }
+    }
+  }
+};
+
+function buildBar(id, labels, data, color) {
+  new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: color + 'cc',
+        borderColor: color,
+        borderWidth: 1.5,
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options: {
+      ...chartDefaults,
+      plugins: {
+        ...chartDefaults.plugins,
+        legend: { display: false }
+      }
+    }
+  });
+}
+
+async function init() {
+  try {
+    const rows = await fetchCSV(URL_CM);
+    if (!rows.length) { document.getElementById('badge-period').textContent = 'Sin datos'; return; }
+
+    const igRows = rows.filter(r => (key(r,'Plataforma','plataforma')||'').toLowerCase().includes('instagram'));
+    const lkRows = rows.filter(r => (key(r,'Plataforma','plataforma')||'').toLowerCase().includes('linkedin'));
+
+    // Scorecards
+    const totalComentarios = rows.filter(r => (key(r,'¿Comenté?','Comenté')||'').toLowerCase() === 'sí' || (key(r,'¿Comenté?','Comenté')||'').toLowerCase() === 'si').length;
+    const totalReacciones = rows.reduce((s,r) => s + parseFloat(key(r,'Reacciones','reacciones')||0), 0);
+    const totalRespuestas = rows.reduce((s,r) => {
+      const r1 = key(r,'Respuesta 1','Respuesta1') ? 1 : 0;
+      const r2 = key(r,'Respuesta 2','Respuesta2') ? 1 : 0;
+      return s + r1 + r2;
+    }, 0);
+
+    document.getElementById('sc-total').textContent = fmtNum(totalComentarios);
+    document.getElementById('sc-total-sub').textContent = `${igRows.length} IG · ${lkRows.length} LK`;
+    document.getElementById('sc-reacciones').textContent = fmtNum(totalReacciones);
+    document.getElementById('sc-respuestas').textContent = fmtNum(totalRespuestas);
+
+    // Período
+    const fechas = rows.map(r => new Date(key(r,'Fecha','fecha'))).filter(d => !isNaN(d)).sort((a,b)=>a-b);
+    if (fechas.length) {
+      const opts = {month:'short', year:'numeric'};
+      const first = fechas[0].toLocaleDateString('es-MX', opts);
+      const last  = fechas[fechas.length-1].toLocaleDateString('es-MX', opts);
+      document.getElementById('badge-period').textContent = first === last ? first : `${first} → ${last}`;
+    } else {
+      document.getElementById('badge-period').textContent = 'Q2 2026';
+    }
+
+    // Chart IG vs LK
+    const igComentados = igRows.filter(r => (key(r,'¿Comenté?')||'').toLowerCase().includes('sí') || (key(r,'¿Comenté?')||'').toLowerCase().includes('si')).length;
+    const lkComentados = lkRows.filter(r => (key(r,'¿Comenté?')||'').toLowerCase().includes('sí') || (key(r,'¿Comenté?')||'').toLowerCase().includes('si')).length;
+
+    new Chart(document.getElementById('chartRedes'), {
+      type: 'bar',
+      data: {
+        labels: ['Instagram', 'LinkedIn'],
+        datasets: [{
+          data: [igComentados, lkComentados],
+          backgroundColor: ['#fc5c3acc', '#2c59b7cc'],
+          borderColor: ['#fc5c3a', '#2c59b7'],
+          borderWidth: 1.5,
+          borderRadius: 8,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        ...chartDefaults,
+        plugins: { ...chartDefaults.plugins, legend: { display: false } }
+      }
+    });
+
+    // Charts actividad por red
+    function getStats(netRows) {
+      const comentados = netRows.filter(r => (key(r,'¿Comenté?')||'').toLowerCase().includes('sí') || (key(r,'¿Comenté?')||'').toLowerCase().includes('si')).length;
+      const reacciones = netRows.reduce((s,r) => s + parseFloat(key(r,'Reacciones','reacciones')||0), 0);
+      const respuestas = netRows.reduce((s,r) => {
+        const r1 = key(r,'Respuesta 1','Respuesta1') ? 1 : 0;
+        const r2 = key(r,'Respuesta 2','Respuesta2') ? 1 : 0;
+        return s + r1 + r2;
+      }, 0);
+      return [comentados, reacciones, respuestas];
+    }
+
+    const labels = ['Comentarios dados', 'Reacciones recibidas', 'Respuestas recibidas'];
+    buildBar('chartIG', labels, getStats(igRows), '#fc5c3a');
+    buildBar('chartLK', labels, getStats(lkRows), '#2c59b7');
+
+  } catch(e) {
+    console.error(e);
+    document.getElementById('badge-period').textContent = 'Error al cargar';
+  }
+}
+
+init();
+</script>
+</body>
+</html>
