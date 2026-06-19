@@ -26,28 +26,54 @@
   body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text-primary); font-size: 14px; }
   .dashboard { max-width: 1200px; margin: 0 auto; padding: 28px 24px 60px; }
 
-  /* HEADER */
-  .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid var(--orange); }
-  .header-left h1 { font-size: 22px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.3px; }
-  .header-left p { font-size: 12px; color: var(--text-secondary); margin-top: 3px; }
-  .badge { font-size: 11px; padding: 5px 14px; border-radius: 99px; background: var(--orange); color: #fff; font-weight: 600; }
+  /* HEADER BANNER */
+  .header {
+    position: relative;
+    background: var(--orange);
+    border-radius: var(--radius);
+    margin-bottom: 24px;
+    padding: 32px 36px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 60px; bottom: 0;
+    width: 90px;
+    background: var(--red);
+    clip-path: polygon(30% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 60px;
+    background: var(--blue-dark);
+  }
+  .header-left { position: relative; z-index: 1; }
+  .header-left h1 { font-size: 28px; font-weight: 700; color: #fff; letter-spacing: -0.3px; }
+  .header-left p { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+  .badge { position: relative; z-index: 1; font-size: 11px; padding: 5px 14px; border-radius: 99px; background: rgba(255,255,255,0.25); color: #fff; font-weight: 600; border: 1px solid rgba(255,255,255,0.3); }
 
   .loading { text-align: center; padding: 32px; color: var(--text-secondary); font-size: 13px; }
 
-  /* SCORECARDS */
+  /* SCORECARDS — fondo naranja, texto blanco */
   .scorecards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-  .scorecard { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(235,159,79,0.08); }
-  .scorecard .val { font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -0.5px; }
-  .scorecard .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-  .scorecard .sub { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; }
-  .val-ig { color: var(--red); }
-  .val-lk { color: var(--blue-dark); }
-  .val-orange { color: var(--orange); }
+  .scorecard { background: var(--orange); border: none; border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 2px 8px rgba(235,159,79,0.25); }
+  .scorecard .val { font-size: 34px; font-weight: 700; line-height: 1; letter-spacing: -0.5px; color: #fff; }
+  .scorecard .lbl { font-size: 12px; color: rgba(255,255,255,0.85); margin-top: 6px; }
+  .scorecard .sub { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 3px; }
+  .val-ig { color: #fff !important; }
+  .val-lk { color: #fff !important; }
+  .val-orange { color: #fff !important; }
 
   /* CHARTS */
   .charts-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
   .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; box-shadow: 0 1px 4px rgba(235,159,79,0.08); }
-  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+  .chart-title { font-size: 13px; font-weight: 600; margin-bottom: 2px; color: var(--text-secondary); }
   .chart-sub { font-size: 11px; color: var(--text-tertiary); margin-bottom: 14px; }
   .chart-wrap { height: 170px; position: relative; }
 
@@ -58,7 +84,7 @@
   /* TABS */
   .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 14px; gap: 4px; }
   .tab { padding: 8px 18px; font-size: 13px; font-weight: 500; color: var(--text-secondary); background: none; border: none; border-bottom: 2px solid transparent; margin-bottom: -1px; cursor: pointer; transition: all 0.15s; border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
-  .tab:hover { background: var(--bg-soft); color: var(--text-primary); }
+  .tab:hover { background: var(--bg-soft); color: var(--orange); }
   .tab.active-ig { color: var(--red); border-bottom-color: var(--red); background: #fff5f3; }
   .tab.active-lk { color: var(--blue-dark); border-bottom-color: var(--blue-dark); background: #f0f4ff; }
   .tab-panel { display: none; }
@@ -72,7 +98,7 @@
   .post-meta { display: flex; align-items: center; justify-content: space-between; }
   .post-rank { font-size: 10px; font-weight: 700; color: var(--orange); background: #fff8f0; padding: 2px 7px; border-radius: 99px; }
   .post-date { font-size: 10px; color: var(--text-tertiary); }
-  .post-title { font-size: 12px; font-weight: 500; color: var(--text-primary); line-height: 1.5; }
+  .post-title { font-size: 12px; font-weight: 500; color: var(--text-secondary); line-height: 1.5; }
   .post-metrics { display: flex; gap: 12px; padding-top: 8px; border-top: 1px solid var(--border); flex-wrap: wrap; }
   .pm .v { font-size: 14px; font-weight: 700; color: var(--orange); display: block; }
   .pm .l { font-size: 9px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 1px; }
@@ -85,13 +111,13 @@
   .comment-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: 0 1px 4px rgba(235,159,79,0.07); }
   .comment-header { display: flex; align-items: center; gap: 8px; }
   .avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; }
-  .commenter-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+  .commenter-name { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
   .commenter-role { font-size: 10px; color: var(--text-tertiary); }
   .net-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 99px; margin-left: auto; flex-shrink: 0; }
-  .net-badge.lk { background: #dce8f8; color: #2c59b7; }
+  .net-badge.lk { background: #dce8f8; color: #486ec8; }
   .net-badge.ig { background: #fde8e4; color: #fc5c3a; }
-  .comment-our { font-size: 11px; color: var(--text-primary); background: #fff8f0; border-left: 2px solid var(--orange); padding: 6px 9px; border-radius: 0 6px 6px 0; line-height: 1.5; font-weight: 500; }
-  .comment-response { font-size: 11px; color: var(--text-secondary); line-height: 1.6; font-style: italic; background: var(--bg-soft); padding: 6px 9px; border-radius: 6px; }
+  .comment-our { font-size: 11px; color: var(--text-secondary); background: #fff8f0; border-left: 2px solid var(--orange); padding: 6px 9px; border-radius: 0 6px 6px 0; line-height: 1.5; font-weight: 500; }
+  .comment-response { font-size: 11px; color: var(--blue-mid); line-height: 1.6; font-style: italic; background: #f0f4ff; padding: 6px 9px; border-radius: 6px; border-left: 2px solid var(--blue-light); }
   .comment-footer { display: flex; align-items: center; justify-content: space-between; padding-top: 6px; border-top: 1px solid var(--border); }
   .comment-ref { font-size: 10px; color: var(--text-tertiary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
 
@@ -101,7 +127,7 @@
   .link-row:hover { box-shadow: 0 3px 10px rgba(235,159,79,0.12); border-color: var(--orange); }
   .link-rank { font-size: 11px; font-weight: 700; color: var(--orange); width: 18px; flex-shrink: 0; }
   .link-info { flex: 1; display: flex; flex-direction: column; gap: 5px; }
-  .link-name { font-size: 12px; font-weight: 500; color: var(--text-primary); }
+  .link-name { font-size: 12px; font-weight: 500; color: var(--text-secondary); }
   .link-bar-track { background: #fff3e6; border-radius: 99px; height: 5px; overflow: hidden; }
   .link-bar-fill { height: 5px; border-radius: 99px; background: linear-gradient(90deg, var(--orange), var(--red)); }
   .link-clicks { font-size: 14px; font-weight: 700; color: var(--orange); white-space: nowrap; }
@@ -154,26 +180,26 @@
   <div class="section-hd">Historias · Resumen del período</div>
   <div class="scorecards">
     <div class="scorecard">
-      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Visualizaciones</div>
+      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.9);">Visualizaciones</div>
       <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
-        <div><div class="val val-orange" id="st-views-max">—</div><div class="lbl">Máx. historia</div></div>
-        <div><div style="font-size:22px;font-weight:700;color:var(--text-secondary)" id="st-views-avg">—</div><div class="lbl">Promedio Q</div></div>
+        <div><div class="val" id="st-views-max" style="color:#fff">—</div><div class="lbl">Máx. historia</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:rgba(255,255,255,0.75)" id="st-views-avg">—</div><div class="lbl">Promedio Q</div></div>
       </div>
     </div>
     <div class="scorecard">
-      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Clics en el enlace</div>
+      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.9);">Clics en el enlace</div>
       <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
-        <div><div class="val val-orange" id="st-clicks-total">—</div><div class="lbl">Total Q</div></div>
-        <div><div style="font-size:22px;font-weight:700;color:var(--text-secondary)" id="st-clicks-max">—</div><div class="lbl">Máx.</div></div>
-        <div><div style="font-size:22px;font-weight:700;color:var(--text-tertiary)" id="st-clicks-avg">—</div><div class="lbl">Promedio</div></div>
+        <div><div class="val" id="st-clicks-total" style="color:#fff">—</div><div class="lbl">Total Q</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:rgba(255,255,255,0.75)" id="st-clicks-max">—</div><div class="lbl">Máx.</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:rgba(255,255,255,0.55)" id="st-clicks-avg">—</div><div class="lbl">Promedio</div></div>
       </div>
     </div>
     <div class="scorecard">
-      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:var(--text-primary);">Visitas al perfil</div>
+      <div class="lbl" style="margin-bottom:10px;font-size:12px;font-weight:600;color:rgba(255,255,255,0.9);">Visitas al perfil</div>
       <div style="display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;">
-        <div><div class="val val-orange" id="st-profile-total">—</div><div class="lbl">Total Q</div></div>
-        <div><div style="font-size:22px;font-weight:700;color:var(--text-secondary)" id="st-profile-max">—</div><div class="lbl">Máx.</div></div>
-        <div><div style="font-size:22px;font-weight:700;color:var(--text-tertiary)" id="st-profile-avg">—</div><div class="lbl">Promedio</div></div>
+        <div><div class="val" id="st-profile-total" style="color:#fff">—</div><div class="lbl">Total Q</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:rgba(255,255,255,0.75)" id="st-profile-max">—</div><div class="lbl">Máx.</div></div>
+        <div><div style="font-size:22px;font-weight:700;color:rgba(255,255,255,0.55)" id="st-profile-avg">—</div><div class="lbl">Promedio</div></div>
       </div>
     </div>
   </div>
@@ -419,7 +445,7 @@ function renderComments(rows) {
     const ac = avatarColors[i];
     const red = (key(c,'Plataforma','plataforma')||'').toLowerCase().includes('instagram') ? 'ig' : 'lk';
     const comentario = key(c,'Comentario','comentario');
-    const respuesta = key(c,'Respuesta 1','respuesta 1','Respuesta');
+    const respuesta = key(c,'Respuesta 1','Respuesta1','respuesta 1','respuesta1','Respuesta','respuesta');
     const linkPost = key(c,'Link del post','link del post');
     const post = key(c,'Post','post');
     const fecha = fmtFecha(key(c,'Fecha','fecha'));
