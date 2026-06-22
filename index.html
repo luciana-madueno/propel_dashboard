@@ -490,24 +490,36 @@ function renderProgress(progressRows) {
   }
 }
 
-function thumbIG(p, i) { return ''; }
-function thumbLK(p, i) { return ''; }
+function thumbIG(p, i) {
+  const url = key(p,'thumbnail','Thumbnail','thumbnail_url','Thumbnail URL');
+  if (url && url.startsWith('http')) {
+    return `<img src="${url}" alt="${key(p,'titulo','Titulo')}" style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border-radius:var(--radius) var(--radius) 0 0;" onerror="this.style.display='none'">`;
+  }
+  return '';
+}
+function thumbLK(p, i) {
+  const url = key(p,'thumbnail','Thumbnail','thumbnail_url','Thumbnail URL');
+  if (url && url.startsWith('http')) {
+    return `<img src="${url}" alt="${key(p,'titulo','Titulo')}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border-radius:var(--radius) var(--radius) 0 0;" onerror="this.style.display='none'">`;
+  }
+  return '';
+}
 
 function renderIGPosts(rows) {
-  const posts = rows.sort((a,b) => tasa(b) - tasa(a)).slice(0,3);
+  const posts = rows.sort((a,b) => parseFloat(key(b,'alcance','Alcance')||0) - parseFloat(key(a,'alcance','Alcance')||0)).slice(0,3);
   if (!posts.length) { document.getElementById('cards-ig').innerHTML = '<div class="loading">No se encontraron posts en la Sheet de Instagram</div>'; return; }
   document.getElementById('cards-ig').innerHTML = posts.map((p,i) => `
     <div class="post-card">
+      ${thumbIG(p,i)}
       <div class="post-body">
         <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${fmtFecha(key(p,'fecha','Fecha'))}</span></div>
         <div class="post-title">${key(p,'titulo','Titulo','título')}</div>
         <div class="post-metrics">
-          <div class="pm"><span class="v">${fmtNum(key(p,'alcance','Alcance'))}</span><span class="l">Alcance</span></div>
-          <div class="pm"><span class="v">${fmtNum(key(p,'guardados','Guardados'))}</span><span class="l">Guardados</span></div>
+          <div class="pm"><span class="v">${fmtNum(key(p,'alcance','Alcance'))}</span><span class="l">Vistas</span></div>
           <div class="pm"><span class="v">${Math.round(tasa(p))}</span><span class="l">Tasa inter.</span></div>
         </div>
         ${key(p,'insight','Insight') ? `<div class="post-insight ig">${key(p,'insight','Insight')}</div>` : ''}
-        ${key(p,'thumbnail_url','url','URL') ? `<a class="post-link" href="${key(p,'thumbnail_url','url','URL')}" target="_blank">Ver post →</a>` : ''}
+        ${key(p,'link','Link','url','URL') ? `<a class="post-link" href="${key(p,'link','Link','url','URL')}" target="_blank">Ver post →</a>` : ''}
       </div>
     </div>`).join('');
 }
@@ -517,16 +529,16 @@ function renderLKPosts(rows) {
   if (!posts.length) { document.getElementById('cards-lk').innerHTML = '<div class="loading">No se encontraron posts en la Sheet de LinkedIn</div>'; return; }
   document.getElementById('cards-lk').innerHTML = posts.map((p,i) => `
     <div class="post-card">
+      ${thumbLK(p,i)}
       <div class="post-body">
         <div class="post-meta"><span class="post-rank">#${i+1}</span><span class="post-date">${fmtFecha(key(p,'fecha','Fecha'))}</span></div>
         <div class="post-title">${key(p,'titulo','Titulo','título')}</div>
         <div class="post-metrics">
-          <div class="pm"><span class="v">${fmtNum(key(p,'impresiones','Impresiones'))}</span><span class="l">Imp.</span></div>
-          <div class="pm"><span class="v">${fmtNum(key(p,'clics','Clics'))}</span><span class="l">Clics</span></div>
+          <div class="pm"><span class="v">${fmtNum(key(p,'impresiones','Impresiones'))}</span><span class="l">Vistas</span></div>
           <div class="pm"><span class="v">${Math.round(tasa(p))}</span><span class="l">Tasa inter.</span></div>
         </div>
         ${key(p,'insight','Insight') ? `<div class="post-insight">${key(p,'insight','Insight')}</div>` : ''}
-        ${key(p,'url','URL','thumbnail_url') ? `<a class="post-link" href="${key(p,'url','URL','thumbnail_url')}" target="_blank">Ver post →</a>` : ''}
+        ${key(p,'link','Link','url','URL') ? `<a class="post-link" href="${key(p,'link','Link','url','URL')}" target="_blank">Ver post →</a>` : ''}
       </div>
     </div>`).join('');
 }
