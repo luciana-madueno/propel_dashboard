@@ -490,16 +490,27 @@ function renderProgress(progressRows) {
   }
 }
 
+function driveUrl(raw) {
+  if (!raw) return '';
+  // Convierte cualquier formato de Drive a URL de imagen directa
+  const m = raw.match(/[-\w]{25,}/);
+  if (raw.includes('drive.google.com') && m) {
+    return 'https://drive.google.com/uc?export=view&id=' + m[0];
+  }
+  return raw;
+}
 function thumbIG(p, i) {
-  const url = key(p,'thumbnail','Thumbnail','thumbnail_url','Thumbnail URL');
-  if (url && url.startsWith('http')) {
+  const raw = key(p,'thumbnail','Thumbnail','thumbnail_url','Thumbnail URL');
+  const url = driveUrl(raw);
+  if (url) {
     return `<img src="${url}" alt="${key(p,'titulo','Titulo')}" style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block;border-radius:var(--radius) var(--radius) 0 0;" onerror="this.style.display='none'">`;
   }
   return '';
 }
 function thumbLK(p, i) {
-  const url = key(p,'thumbnail','Thumbnail','thumbnail_url','Thumbnail URL');
-  if (url && url.startsWith('http')) {
+  const raw = key(p,'thumbnail','Thumbnail','thumbnail_url','Thumbnail URL');
+  const url = driveUrl(raw);
+  if (url) {
     return `<img src="${url}" alt="${key(p,'titulo','Titulo')}" style="width:100%;aspect-ratio:16/9;object-fit:cover;display:block;border-radius:var(--radius) var(--radius) 0 0;" onerror="this.style.display='none'">`;
   }
   return '';
