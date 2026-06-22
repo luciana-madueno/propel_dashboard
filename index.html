@@ -290,6 +290,7 @@ const URL_CM       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a
 const URL_LT       = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=788344558&single=true&output=csv';
 const URL_STORIES  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=1157588083&single=true&output=csv';
 const URL_ENG      = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=300532583&single=true&output=csv';
+const URL_PROGRESS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQTgYWBo2a9o2moNLuetfaOMIPKZCn7VTe2qMTc-XwJApkZbpPZS9InD0QV2SdEQh-9thge9o_pQ4oY/pub?gid=226932387&single=true&output=csv';
 
 function fetchCSV(url) {
   return new Promise((resolve, reject) => {
@@ -438,50 +439,53 @@ const avatarColors = [
 ];
 
 
-function renderProgress(engRows) {
-  if (!engRows.length) return;
+function renderProgress(progressRows) {
+  if (!progressRows.length) return;
 
-  // Tomar todas las filas con engagement cierre válido, ordenadas por fecha
-  const allRows = engRows
+  // Ordenar por semana y filtrar filas con engagement válido
+  const rows = progressRows
     .map(r => ({
       semana: key(r,'Semana','semana'),
-      cierre: parseFloat(key(r,'Engagement cierre')||0)
+      eng:    parseFloat(key(r,'Engagement','engagement')||0),
+      meta:   parseFloat(key(r,'Meta total','meta total','Meta','meta')||0)
     }))
-    .filter(d => d.semana && d.cierre > 0)
+    .filter(d => d.semana && d.eng > 0)
     .sort((a,b) => new Date(a.semana) - new Date(b.semana));
 
-  if (allRows.length < 2) return;
+  if (rows.length < 2) return;
 
-  const q1Val  = allRows[0].cierre;           // primera semana = Q anterior
-  const actual = allRows[allRows.length-1].cierre; // última semana con datos
-  const meta   = q1Val * 1.3;                // meta = +30%
+  const inicial = rows[0].eng;                          // primera semana = Q anterior
+  const actual  = rows[rows.length - 1].eng;            // última semana con datos
+  const metaVal = rows[rows.length - 1].meta || (inicial * 1.3); // meta de la última semana o +30%
+  const metaTotal = inicial * 1.3;                      // meta calculada +30%
 
-  const crecimiento = ((actual - q1Val) / q1Val) * 100;
-  const progPct     = Math.min((crecimiento / 30) * 100, 100); // % de avance hacia la meta del 30%
-  const falta       = meta - actual;
+  const crecimiento = ((actual - inicial) / inicial) * 100;
+  const progPct     = Math.min(Math.max((crecimiento / 30) * 100, 0), 100);
+  const falta       = metaTotal - actual;
 
-  document.getElementById('prog-q1').textContent       = fmt(q1Val, 1);
-  document.getElementById('prog-actual').textContent   = fmt(actual, 1);
-  document.getElementById('prog-meta-label').textContent = `Meta: ${fmt(meta, 1)}`;
+  // Bloque izquierdo
+  document.getElementById('prog-q1').textContent = fmt(inicial, 1);
+
+  // Barra central
+  document.getElementById('prog-meta-label').textContent = `Meta: ${fmt(metaTotal, 1)}`;
   document.getElementById('prog-pct-label').textContent  = `${fmt(progPct, 0)}% de la meta`;
-
-  // Barra de progreso
   setTimeout(() => {
     document.getElementById('prog-fill').style.width = Math.max(progPct, 2) + '%';
   }, 300);
 
-  // Crecimiento total
+  // Bloque derecho
+  document.getElementById('prog-actual').textContent = fmt(actual, 1);
+
   const growthEl = document.getElementById('prog-growth');
   growthEl.textContent = (crecimiento >= 0 ? '+' : '') + fmt(crecimiento, 1) + '%';
   growthEl.className   = 'progress-stat-val ' + (crecimiento >= 30 ? 'up' : crecimiento > 0 ? 'neutral' : 'down');
 
-  // Falta para meta
   const remainEl = document.getElementById('prog-remaining');
   if (falta <= 0) {
     remainEl.textContent = '¡Meta alcanzada! 🎉';
     remainEl.className   = 'progress-stat-val up';
   } else {
-    remainEl.textContent = fmt(falta, 1) + ' pts';
+    remainEl.textContent = '+' + fmt(falta, 1) + ' pts para la meta';
     remainEl.className   = 'progress-stat-val neutral';
   }
 }
@@ -623,9 +627,9 @@ function updateScorecards(igRows, lkRows, storiesRows, cmRows) {
 
 async function init() {
   try {
-    const [igRows, lkRows, cmRows, ltRows, storiesRows, engRows] = await Promise.all([
+    const [igRows, lkRows, cmRows, ltRows, storiesRows, engRows, progressRows] = await Promise.all([
       fetchCSV(URL_IG), fetchCSV(URL_LK), fetchCSV(URL_CM), fetchCSV(URL_LT),
-      fetchCSV(URL_STORIES), fetchCSV(URL_ENG)
+      fetchCSV(URL_STORIES), fetchCSV(URL_ENG), fetchCSV(URL_PROGRESS)
     ]);
 
     updateScorecards(igRows, lkRows, storiesRows, cmRows);
@@ -637,7 +641,7 @@ async function init() {
     if (igEngData.length) chartIG = buildChartEng('chartIG', igEngData, '#fc5c3a');
     if (lkEngData.length) chartLK = buildChartEng('chartLK', lkEngData, '#2c59b7');
 
-    renderProgress(engRows);
+    renderProgress(progressRows);
     renderIGPosts(igRows);
     renderLKPosts(lkRows);
     renderStories(storiesRows);
