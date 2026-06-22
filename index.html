@@ -131,6 +131,36 @@
   .link-bar-track { background: #fff3e6; border-radius: 99px; height: 5px; overflow: hidden; }
   .link-bar-fill { height: 5px; border-radius: 99px; background: linear-gradient(90deg, var(--orange), var(--red)); }
   .link-clicks { font-size: 14px; font-weight: 700; color: var(--orange); white-space: nowrap; }
+
+  /* BARRA DE PROGRESO VS Q ANTERIOR */
+  .progress-bar-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 4px rgba(235,159,79,0.08);
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: center;
+  }
+  .progress-meta-block { display: flex; flex-direction: column; gap: 4px; }
+  .progress-meta-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); }
+  .progress-meta-value { font-size: 22px; font-weight: 700; color: var(--orange); }
+  .progress-meta-sub { font-size: 11px; color: var(--text-tertiary); }
+  .progress-center { display: flex; flex-direction: column; gap: 8px; }
+  .progress-center-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); display: flex; justify-content: space-between; }
+  .progress-track { background: #f0f4ff; border-radius: 99px; height: 10px; overflow: hidden; width: 100%; }
+  .progress-fill { height: 10px; border-radius: 99px; background: linear-gradient(90deg, var(--orange), var(--red)); transition: width 0.8s ease; }
+  .progress-sublabels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-tertiary); }
+  .progress-right { display: flex; flex-direction: column; gap: 10px; }
+  .progress-stat { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .progress-stat-label { font-size: 11px; color: var(--text-secondary); }
+  .progress-stat-val { font-size: 14px; font-weight: 700; }
+  .progress-stat-val.up { color: #22c55e; }
+  .progress-stat-val.down { color: var(--red); }
+  .progress-stat-val.neutral { color: var(--orange); }
 </style>
 </head>
 <body>
@@ -148,6 +178,43 @@
     <div class="scorecard"><div class="val val-orange" id="sc-posts">—</div><div class="lbl">Publicaciones</div><div class="sub" id="sc-posts-sub">—</div></div>
     <div class="scorecard"><div class="val val-ig" id="sc-stories">—</div><div class="lbl">Historias</div><div class="sub">Instagram</div></div>
     <div class="scorecard"><div class="val val-lk" id="sc-comments">—</div><div class="lbl">Comentarios</div><div class="sub">IG + LinkedIn</div></div>
+  </div>
+
+
+  <!-- BARRA PROGRESO VS Q ANTERIOR -->
+  <div class="progress-bar-section" id="progress-section">
+    <div class="progress-meta-block">
+      <div class="progress-meta-label">Q anterior (inicio)</div>
+      <div class="progress-meta-value" id="prog-q1">—</div>
+      <div class="progress-meta-sub">Engagement cierre semana 1</div>
+    </div>
+    <div class="progress-center">
+      <div class="progress-center-label">
+        <span>Progreso hacia meta +30%</span>
+        <span id="prog-pct-label">—%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="prog-fill" style="width:0%"></div>
+      </div>
+      <div class="progress-sublabels">
+        <span>Q anterior</span>
+        <span id="prog-meta-label">Meta: —</span>
+      </div>
+    </div>
+    <div class="progress-right">
+      <div class="progress-stat">
+        <span class="progress-stat-label">Engagement actual</span>
+        <span class="progress-stat-val neutral" id="prog-actual">—</span>
+      </div>
+      <div class="progress-stat">
+        <span class="progress-stat-label">Crecimiento total</span>
+        <span class="progress-stat-val" id="prog-growth">—</span>
+      </div>
+      <div class="progress-stat">
+        <span class="progress-stat-label">Falta para meta</span>
+        <span class="progress-stat-val" id="prog-remaining">—</span>
+      </div>
+    </div>
   </div>
 
   <div class="charts-row">
@@ -370,6 +437,55 @@ const avatarColors = [
   {bg:'#dce8f8',color:'#2c59b7'}
 ];
 
+
+function renderProgress(engRows) {
+  if (!engRows.length) return;
+
+  // Tomar todas las filas con engagement cierre válido, ordenadas por fecha
+  const allRows = engRows
+    .map(r => ({
+      semana: key(r,'Semana','semana'),
+      cierre: parseFloat(key(r,'Engagement cierre')||0)
+    }))
+    .filter(d => d.semana && d.cierre > 0)
+    .sort((a,b) => new Date(a.semana) - new Date(b.semana));
+
+  if (allRows.length < 2) return;
+
+  const q1Val  = allRows[0].cierre;           // primera semana = Q anterior
+  const actual = allRows[allRows.length-1].cierre; // última semana con datos
+  const meta   = q1Val * 1.3;                // meta = +30%
+
+  const crecimiento = ((actual - q1Val) / q1Val) * 100;
+  const progPct     = Math.min((crecimiento / 30) * 100, 100); // % de avance hacia la meta del 30%
+  const falta       = meta - actual;
+
+  document.getElementById('prog-q1').textContent       = fmt(q1Val, 1);
+  document.getElementById('prog-actual').textContent   = fmt(actual, 1);
+  document.getElementById('prog-meta-label').textContent = `Meta: ${fmt(meta, 1)}`;
+  document.getElementById('prog-pct-label').textContent  = `${fmt(progPct, 0)}% de la meta`;
+
+  // Barra de progreso
+  setTimeout(() => {
+    document.getElementById('prog-fill').style.width = Math.max(progPct, 2) + '%';
+  }, 300);
+
+  // Crecimiento total
+  const growthEl = document.getElementById('prog-growth');
+  growthEl.textContent = (crecimiento >= 0 ? '+' : '') + fmt(crecimiento, 1) + '%';
+  growthEl.className   = 'progress-stat-val ' + (crecimiento >= 30 ? 'up' : crecimiento > 0 ? 'neutral' : 'down');
+
+  // Falta para meta
+  const remainEl = document.getElementById('prog-remaining');
+  if (falta <= 0) {
+    remainEl.textContent = '¡Meta alcanzada! 🎉';
+    remainEl.className   = 'progress-stat-val up';
+  } else {
+    remainEl.textContent = fmt(falta, 1) + ' pts';
+    remainEl.className   = 'progress-stat-val neutral';
+  }
+}
+
 function thumbIG(p, i) { return ''; }
 function thumbLK(p, i) { return ''; }
 
@@ -521,6 +637,7 @@ async function init() {
     if (igEngData.length) chartIG = buildChartEng('chartIG', igEngData, '#fc5c3a');
     if (lkEngData.length) chartLK = buildChartEng('chartLK', lkEngData, '#2c59b7');
 
+    renderProgress(engRows);
     renderIGPosts(igRows);
     renderLKPosts(lkRows);
     renderStories(storiesRows);
